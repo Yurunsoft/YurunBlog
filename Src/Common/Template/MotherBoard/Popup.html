@@ -1,0 +1,71 @@
+<!doctype html>
+<html id="admin">
+	<head>
+	<include name="/public_head"/>
+	</head>
+  	<body id="popup">
+  		<div>
+			<script>
+				var layerIndex = -1;
+				var onClose = null;
+				var onSuccess = null;
+				var nomessage = <%=Request::get('nomessage',0)%>;
+				function closePopup(data)
+				{
+					if(onClose != null)
+					{
+						parseCallback({callback:onClose,params:[data]});
+					}
+					parent.layer.close(layerIndex);
+				}
+				function getPostData()
+				{
+					return $('#form1').serialize();
+				}
+				function submit(e)
+				{
+					var formJson = getFormJson('#form1');
+					$.ajax({
+					    type: "post",
+					    url: $('#form1').attr('action'), 
+					    data: getPostData(),
+					    success: function(data) {
+					        if(data.success)
+					        {
+								if(null != onSuccess)
+								{
+									parseCallback({callback:onSuccess,params:[data,formJson]});
+								}
+								if(!nomessage)
+								{
+									parent.layer.msg('操作成功！', {time: 3000, icon:6});
+								}
+								closePopup(data);
+					        }
+					        else
+					        {
+					        	parent.layer.alert(data.message,{icon: 2});
+					        }
+					    },
+					    error: function(error){
+					    	parent.layer.alert('服务器出现错误，请重试！',{icon: 2});
+					    }
+					});
+					e.preventDefault();
+				}
+				$(function(){
+					$('#form1').submit(submit);
+					form.render();
+				});
+			</script>
+			<if condition="empty($template)">
+				<php>
+					$file = __DYNAMIC_CONTROL__ . '/' . __DYNAMIC_ACTION__;
+				</php>
+				<include name="#$file"/>
+			<else/>
+				<include name="#$template"/>
+			</if>
+		</div>
+  	</body>
+</html>

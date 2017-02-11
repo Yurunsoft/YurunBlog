@@ -1,0 +1,19 @@
+<?php
+if(isMobile()):
+	if($this->istime == 1):
+?>
+<input type="datetime-local" class="layui-input"<?php echo $this->attrsStr;?>/>
+<?php else:?>
+<input type="date" class="layui-input"<?php echo $this->attrsStr;?>/>
+<?php endif;else:?>
+<input type="text"<?php echo $this->attrsStr;?> readonly onclick="layui.laydate({
+	elem:this,
+	<?php if(!empty($this->format)):?>
+	format:'<?php echo $this->format?>',
+	<?php endif;?>
+	istime:<?php echo $this->is_time;?>
+});"/>
+<script>
+$('#<?php echo $this->id?>').css('cursor','pointer');
+</script>
+<?php endif;?>

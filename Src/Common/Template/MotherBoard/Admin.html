@@ -1,0 +1,26 @@
+<!doctype html>
+<html id="admin">
+	<head>
+	<include name="/public_head"/>
+	</head>
+	<body>
+		<div id="body_content">
+			<h3>
+				<%=$title%>
+			</h3>
+			<div class="wrap">
+				<div class="shortcuts">
+					<foreach list="$shortcuts" key="title" value="url">
+						<a href="<%=$url%>" class="btn"><%=$title%></a>
+					</foreach>
+				</div>
+				<if condition="empty($template)">
+					<include name="__CONTROL__/#__DYNAMIC_ACTION__"/>
+					<else/>
+					<include name="#$template"/>
+				</if>
+			</div>
+		</div>
+	</body>
+</html>
+<!-- 处理时间：<%=microtime(true) - YURUN_START%> -->
