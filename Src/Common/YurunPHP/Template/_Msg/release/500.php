@@ -1,5 +1,4 @@
-<?php defined('YURUN_START') or exit;?>
-<!DOCTYPE>
+<?php defined('YURUN_START') or exit;?><!DOCTYPE>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
