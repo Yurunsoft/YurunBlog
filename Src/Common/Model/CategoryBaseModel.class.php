@@ -11,6 +11,11 @@ abstract class CategoryBaseModel extends BaseModel
 	public $oldCategoryID = 0;
 	public function parseData(&$data)
 	{
+		$result = parent::parseData($data);
+		if(null !== $result && true !== $result)
+		{
+			return $result;
+		}
 		if(isEmpty($data['Name']))
 		{
 			return '分类名称不能为空';
@@ -30,47 +35,20 @@ abstract class CategoryBaseModel extends BaseModel
 			$this->oldCategoryID = $info[$this->parentFieldName];
 		}
 	}
-	/**
-	 * 创建分类，成功返回分类ID，失败返回错误信息
-	 * @param $data array 数据
-	 * @return mixed
-	 */
-	public function create($data)
+	public function __addAfter(&$data,$result)
 	{
-		$result = $this->parseData($data);
-		if(null !== $result)
-		{
-			return $result;
-		}
-		$result = $this->add($data,Db::RETURN_INSERT_ID);
-		if($result <= 0)
-		{
-			return '创建失败';
-		}
-		$this->updateParent($data['Parent']);
+		Log::add('add:' . $result);
 		$this->updateChildren($result);
-		return $result > 0;
 	}
-	/**
-	 * 修改分类
-	 * @param $data array 数据
-	 * @return mixed
-	 */
-	public function update($data)
+	public function __editAfter(&$data,$result)
 	{
-		$result = $this->parseData($data);
-		if(null !== $result)
-		{
-			return $result;
-		}
-		$result = $this->where(array($this->pk=>$data[$this->pk]))->edit($data,Db::RETURN_INSERT_ID);
-		if($result <= 0)
-		{
-			return '修改失败';
-		}
-		$this->updateParent($data['Parent']);
-		$this->updateChildren($data['ID']);
-		return $result > 0;
+		Log::add('edit:' . print_r($data,true));
+		$this->updateChildren($data[$this->pk]);
+	}
+	public function __saveAfter(&$data,$result)
+	{
+		Log::add('save:' . print_r($data,true));
+		$this->updateParent($data[$this->parentFieldName]);
 	}
 	/**
 	 * 获取关联列表
@@ -335,5 +313,12 @@ SQL
 			}
 		}
 		return $result;
+	}
+	/*
+	 * 处理查询内容
+	 */
+	public function parseSelect($data)
+	{
+		return $this->order(array('Index','ID'));
 	}
 }

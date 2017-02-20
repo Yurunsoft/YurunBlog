@@ -3,13 +3,16 @@ class BaseModel extends Model
 {
 	// 主键
 	public $pk = 'ID';
-	// 是否查询后处理数据
-	protected $isParseDataAfter = true;
 	/**
 	 * 处理静态文件规则
 	 * @var type 
 	 */
 	public $dataStaticFileRule = array();
+	/**
+	 * 扩展数据类型：以 EX_DATA_TYPE_ 开头的常量
+	 * @var int
+	 */
+	public $exDataType = null;
 	/**
 	 * 获得主键名称
 	 * @return string
@@ -33,41 +36,38 @@ class BaseModel extends Model
 		return $this;
 	}
 	/**
-	 * 在查询数据后处理数据
-	 * @param type $data
+	 * 在操作前处理数据
+	 * @param array $data
 	 */
-	public function parseDataAfter(&$data)
+	public function parseData(&$data)
 	{
-	}
-	/**
-	 * 在查询数据后处理数据
-	 * @param type $data
-	 */
-	public function parseDataListAfter(&$data)
-	{
-		$s = count($data);
-		for($i=0;$i<$s;++$i)
+		if(null !== $this->exDataType)
 		{
-			$this->parseDataAfter($data[$i]);
+			if(isset($data['ExData']))
+			{
+				$data['ExData'] = serialize($data['ExData']);
+			}
+		}
+	}
+	public function __saveBefore(&$data,$result)
+	{
+		return $this->parseData($data);
+	}
+	public function __selectOneAfter(&$data)
+	{
+		if(null !== $this->exDataType)
+		{
+			$data['ExData'] = unserialize($data['ExData']);
 		}
 	}
 	/**
 	 * 获取一条记录
 	 * @param type $id
-	 * @return type
+	 * @return array
 	 */
 	public function getInfo($pkData,$data = array())
 	{
-		$data = $this->parseSelect($data)->getByPk($pkData);
-		if($this->isParseDataAfter)
-		{
-			$this->parseDataAfter($data);
-		}
-		else
-		{
-			$this->isParseDataAfter = true;
-		}
-		return $data;
+		return $this->parseSelect($data)->getByPk($pkData);
 	}
 	/**
 	 * 查询多条记录，支持分页
@@ -98,31 +98,6 @@ class BaseModel extends Model
 			$p = new Page($records,$show,$page);
 			$totalPages = $p->getTotalPages();
 		}
-		if($this->isParseDataAfter)
-		{
-			$this->parseDataListAfter($data);
-		}
-		else
-		{
-			$this->isParseDataAfter = true;
-		}
 		return $data;
-	}
-	protected function concatField($old,$new)
-	{
-		if($old != '')
-		{
-			$new = trim($new);
-			if(isset($new[0]) && $new[0] !== ',')
-			{
-				$old .= ',';
-			}
-		}
-		return $old . $new;
-	}
-	public function dataAfter($isParse)
-	{
-		$this->isParseDataAfter = $isParse;
-		return $this;
 	}
 }

@@ -12,7 +12,6 @@ class CategoryAPI extends BaseAPI
 	 */
 	public function query()
 	{
-		$this->model->order(array('ID'=>'desc'));
 		$this->__query(array(
 			'dataGroupName'	=>	Config::get('@.QUERY_DATA_GROUP_NAME')
 		));
@@ -34,14 +33,14 @@ class CategoryAPI extends BaseAPI
 	 */
 	public function add()
 	{
-		$result = $this->model->create(Request::post());
-		if(true === $result)
+		$result = $this->model->add(Request::post(),Db::RETURN_INSERT_ID);
+		if($result)
 		{
 			$this->success = true;
 		}
 		else
 		{
-			$this->message = $result;
+			$this->message = $this->model->error;
 		}
 	}
 	/**
@@ -52,20 +51,15 @@ class CategoryAPI extends BaseAPI
 	 */
 	public function update()
 	{
-		$result = $this->model->update(Request::post());
-		if(true === $result)
+		$result = $this->model->wherePk(Request::post('ID'))->edit(Request::post());
+		if($result)
 		{
 			$this->success = true;
 		}
 		else
 		{
-			$this->message = $result;
+			$this->message = $this->model->error;
 		}
-	}
-	public function onSaveSuccess($options)
-	{
-		$this->model->updateParent($options->saveOptions['main']->data['Parent']);
-		$this->model->updateChildren($options->saveOptions['main']->data['ID']);
 	}
 	/**
 	 * @API
@@ -75,6 +69,6 @@ class CategoryAPI extends BaseAPI
 	 */
 	public function delete()
 	{
-		// $this->__delete();
+		$this->__delete();
 	}
 }

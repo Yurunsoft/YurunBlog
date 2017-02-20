@@ -168,14 +168,14 @@ class BaseAPI
 		if($isAdd)
 		{
 			$option->data[$pkName] = $option->model->add($option->data,Db::RETURN_INSERT_ID);
-			return $option->data[$pkName] > 0 ? true : '新增失败';
+			return $option->data[$pkName] > 0 ? true : $option->model->error;
 		}
 		else
 		{
 			$data = $option->data;
 			$pk = $data[$pkName];
 			unset($data[$pkName]);
-			return $option->model->where(array($option->model->pk()=>$pk))->edit($data) ? true : '更新失败';
+			return $option->model->where(array($option->model->pk()=>$pk))->edit($data) ? true : $option->model->error;
 		}
 	}
 	/**
@@ -223,7 +223,7 @@ class BaseAPI
 				}
 				else
 				{
-					$result = '新增失败';
+					$result = $option->model->error;
 				}
 			}
 			else
@@ -237,7 +237,7 @@ class BaseAPI
 					}
 					else
 					{
-						$result = '更新失败';
+						$result = $option->model->error;
 					}
 				}
 				else
@@ -251,7 +251,7 @@ class BaseAPI
 			}
 			if(true !== $result)
 			{
-				break;
+				return $option->model->error;
 			}
 		}
 		if(true === $result)

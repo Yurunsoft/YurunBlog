@@ -10,7 +10,7 @@ class ApiControl extends BaseControl
 		$this->action = Request::get('action');
 		$_this = $this;
 		set_exception_handler(function($exception)use($_this){
-			if(Config::get('@.LOG_ON') && Config::get('@.LOG_ERROR'))
+			if(Config::get('@.LOG_ERROR'))
 			{
 				Log::add('错误:'.$exception->getMessage().' 文件:'.$exception->getFile().' 行数:'.$exception->getLine());
 			}
@@ -69,7 +69,7 @@ class ApiControl extends BaseControl
 				throw $exc;
 			}
 		} catch (Exception $exc) {
-			Log::add("API/{$this->control}/{$this->action}:" . $exc->getMessage());
+			Log::add("API/{$this->control}/{$this->action}:" . $exc->getMessage() . ' 文件:' . $exc->getFile() . ' 行数:' . $exc->getLine());
 		}
 		if(empty($this->apiData))
 		{

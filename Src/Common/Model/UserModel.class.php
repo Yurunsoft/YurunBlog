@@ -42,6 +42,7 @@ class UserModel extends UserSession
 	 */
 	public function parseData(&$data)
 	{
+		parent::parseData($data);
 		if(isEmpty($data['Password']))
 		{
 			unset($data['Password']);

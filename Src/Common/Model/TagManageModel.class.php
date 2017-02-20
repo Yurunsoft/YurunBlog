@@ -4,6 +4,7 @@ abstract class TagManageModel extends BaseModel
 	public $table = 'tag_relation';
 	public function parseData(&$data)
 	{
+		parent::parseData($data);
 		unset($data['Type']);
 	}
 	public static function getInstance($type)

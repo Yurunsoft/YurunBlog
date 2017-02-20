@@ -3,6 +3,7 @@ class TagModel extends BaseModel
 {
 	public function parseData(&$data)
 	{
+		parent::parseData($data);
 		if(isEmpty($data['Code']))
 		{
 			$data['Code'] = 'tag_' . uniqid();
