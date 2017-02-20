@@ -43,14 +43,13 @@ abstract class CategoryBaseModel extends BaseModel
 			return $result;
 		}
 		$result = $this->add($data,Db::RETURN_INSERT_ID);
-		if($result > 0)
-		{
-			return $result;
-		}
-		else
+		if($result <= 0)
 		{
 			return '创建失败';
 		}
+		$this->updateParent($data['Parent']);
+		$this->updateChildren($result);
+		return $result > 0;
 	}
 	/**
 	 * 修改分类
@@ -65,14 +64,13 @@ abstract class CategoryBaseModel extends BaseModel
 			return $result;
 		}
 		$result = $this->where(array($this->pk=>$data[$this->pk]))->edit($data,Db::RETURN_INSERT_ID);
-		if($result > 0)
+		if($result <= 0)
 		{
-			return $result;
+			return '修改失败';
 		}
-		else
-		{
-			return '创建失败';
-		}
+		$this->updateParent($data['Parent']);
+		$this->updateChildren($data['ID']);
+		return $result > 0;
 	}
 	/**
 	 * 获取关联列表
@@ -311,13 +309,31 @@ SQL
 	public function getInfo($aliasOrID,$data = array())
 	{
 		// 先根据Alias获取
-		$data = $this->parseSelect($data)->where(array($this->tableName() . '.Alias' => $aliasOrID))->select(true);
+		$data = $this->parseSelect($data)->where(array($this->tableName() . '.' . $this->aliasFieldName => $aliasOrID))->select(true);
 		if(!isset($data[$this->pk]))
 		{
 			// Alias不存在再根据ID获取
-			$data = $this->parseSelect($data)->where(array($this->tableName() . '.ID' => $aliasOrID))->select(true);
+			$data = $this->parseSelect($data)->where(array($this->tableName() . '.' . $this->pk => $aliasOrID))->select(true);
 		}
 		$this->parseDataAfter($data);
 		return $data;
+	}
+	public function selectToSelect($parentID = 0,$currID = -1,$list = null,&$result = null)
+	{
+		if(null === $list)
+		{
+			$result = array();
+			$list = $this->selectList();
+		}
+		foreach($list as $item)
+		{
+			if($item[$this->parentFieldName] == $parentID)
+			{
+				$item['disabled'] = ($item[$this->pk] == $currID || $item[$this->parentFieldName] == $currID);
+				$result[] = $item;
+				$this->selectToSelect($item[$this->pk],$item['disabled'] ? $item[$this->pk] : $currID,$list,$result);
+			}
+		}
+		return $result;
 	}
 }

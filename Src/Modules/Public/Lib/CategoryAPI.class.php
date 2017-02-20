@@ -34,12 +34,6 @@ class CategoryAPI extends BaseAPI
 	 */
 	public function add()
 	{
-		// $this->__add(array(
-		// 	'saveOptions'	=>	array(
-		// 		'main'	=>	new APISaveOptionItem(array('type'=>APISaveOptionItem::TYPE_SINGLE,'dataFromMethod'=>'post','dataCallback'=>array($this->model,'parseData')))
-		// 	),
-		// 	'onSuccess' =>	array($this,'onSaveSuccess'),
-		// ));
 		$result = $this->model->create(Request::post());
 		if(true === $result)
 		{
@@ -67,12 +61,6 @@ class CategoryAPI extends BaseAPI
 		{
 			$this->message = $result;
 		}
-		// $this->__update(array(
-		// 	'saveOptions'	=>	array(
-		// 		'main'	=>	new APISaveOptionItem(array('type'=>APISaveOptionItem::TYPE_SINGLE,'dataFromMethod'=>'post','dataCallback'=>array($this->model,'parseData')))
-		// 	),
-		// 	'onSuccess' =>	array($this,'onSaveSuccess'),
-		// ));
 	}
 	public function onSaveSuccess($options)
 	{

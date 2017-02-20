@@ -1,6 +1,0 @@
-[2017-02-11 14:14:54] PASSWORD_IS_FAIL
-[2017-02-11 14:15:38] API/Category/query:Call to undefined method ApiControl::checkUserSession()
-[2017-02-11 14:15:45] API/Category/query:Call to undefined method ApiControl::checkUserSession()
-[2017-02-11 14:17:15] API/Category/query:Call to undefined method ApiControl::checkUserSession()
-[2017-02-11 14:17:56] API/Category/query:Call to undefined method ApiControl::checkUserSession()
-[2017-02-11 14:21:19] 错误:Class TaskTypeModel does not exist 文件:D:\projects\YurunBlog\Src\Common\YurunPHP\Core\Model.class.php 行数:130
