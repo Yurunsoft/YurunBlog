@@ -13,6 +13,7 @@ class BaseModel extends Model
 	 * @var int
 	 */
 	public $exDataType = null;
+	private $exDataModel;
 	/**
 	 * 获得主键名称
 	 * @return string
@@ -35,29 +36,37 @@ class BaseModel extends Model
 	{
 		return $this;
 	}
-	/**
-	 * 在操作前处理数据
-	 * @param array $data
-	 */
-	public function parseData(&$data)
-	{
-		if(null !== $this->exDataType)
-		{
-			if(isset($data['ExData']))
-			{
-				$data['ExData'] = serialize($data['ExData']);
-			}
-		}
-	}
-	public function __saveBefore(&$data,$result)
-	{
-		return $this->parseData($data);
-	}
 	public function __selectOneAfter(&$data)
 	{
 		if(null !== $this->exDataType)
 		{
-			$data['ExData'] = unserialize($data['ExData']);
+			if(null === $this->exDataModel)
+			{
+				$this->exDataModel = new ExDataModel;
+			}
+			$data['ExData'] = $this->exDataModel->selectList(array('Type'=>$this->exDataType,'AssocPk'=>$data[$this->pk]));
+		}
+	}
+	public function __saveAfter(&$data,$result)
+	{
+		if(null !== $this->exDataType)
+		{
+			if(null === $this->exDataModel)
+			{
+				$this->exDataModel = new ExDataModel;
+			}
+			foreach($data['ExData'] as $key => $value)
+			{
+				if(!$this->exDataModel->save(array(
+					'Type'		=>	$this->exDataType,
+					'AssocPk'	=>	isset($data[$this->pk]) ? $data[$this->pk] : $result,
+					'Key'		=>	$key,
+					'Value'		=>	$value
+				)))
+				{
+					return false;
+				}
+			}
 		}
 	}
 	/**

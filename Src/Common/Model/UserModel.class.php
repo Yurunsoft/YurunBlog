@@ -40,9 +40,8 @@ class UserModel extends UserSession
 	/**
 	 * 处理数据
 	 */
-	public function parseData(&$data)
+	public function __saveBefore(&$data)
 	{
-		parent::parseData($data);
 		if(isEmpty($data['Password']))
 		{
 			unset($data['Password']);
@@ -51,6 +50,7 @@ class UserModel extends UserSession
 		{
 			$data['Password'] = $this->parsePassword($data['Password']);
 		}
+		return parent::__saveBefore($data);
 	}
 	/**
 	 * 保存用户资料
@@ -58,7 +58,6 @@ class UserModel extends UserSession
 	 */
 	public function saveProfile($data)
 	{
-		$this->parseData($data);
 		return $this->where(array('ID'=>$this->userInfo['ID']))->edit($data) ? true : '保存失败';
 	}
 }

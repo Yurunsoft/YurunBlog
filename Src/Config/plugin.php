@@ -1,4 +1,4 @@
 <?php
 return array(
-	array('name'=>'UEditor'),
+	array('name'=>'UEditor','is_open'=>true),
 );

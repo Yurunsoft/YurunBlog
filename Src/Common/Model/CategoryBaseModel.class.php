@@ -9,9 +9,8 @@ abstract class CategoryBaseModel extends BaseModel
 	public $itemTableNumFieldName = 'Nums';
 	public $itemTableCategoryFieldName = 'CategoryID';
 	public $oldCategoryID = 0;
-	public function parseData(&$data)
+	public function __saveBefore(&$data)
 	{
-		$result = parent::parseData($data);
 		if(null !== $result && true !== $result)
 		{
 			return $result;
@@ -34,21 +33,22 @@ abstract class CategoryBaseModel extends BaseModel
 			$info = $this->getByPk($data[$this->pk]);
 			$this->oldCategoryID = $info[$this->parentFieldName];
 		}
+		return parent::__saveBefore();
 	}
 	public function __addAfter(&$data,$result)
 	{
-		Log::add('add:' . $result);
 		$this->updateChildren($result);
+		return parent::__addAfter($data,$result);
 	}
 	public function __editAfter(&$data,$result)
 	{
-		Log::add('edit:' . print_r($data,true));
 		$this->updateChildren($data[$this->pk]);
+		return parent::__editAfter($data,$result);
 	}
 	public function __saveAfter(&$data,$result)
 	{
-		Log::add('save:' . print_r($data,true));
 		$this->updateParent($data[$this->parentFieldName]);
+		return parent::__saveAfter($data,$result);
 	}
 	/**
 	 * 获取关联列表
@@ -293,7 +293,6 @@ SQL
 			// Alias不存在再根据ID获取
 			$data = $this->parseSelect($data)->where(array($this->tableName() . '.' . $this->pk => $aliasOrID))->select(true);
 		}
-		$this->parseDataAfter($data);
 		return $data;
 	}
 	public function selectToSelect($parentID = 0,$currID = -1,$list = null,&$result = null)

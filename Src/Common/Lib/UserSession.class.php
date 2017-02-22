@@ -95,23 +95,20 @@ class UserSession extends BaseModel
 	public function check($isJumpToLogin = false)
 	{
 		// 从session检查
-		if(!$this->checkSession($isJumpToLogin))
+		if($this->checkSession())
 		{
-			return false;
+			return true;
 		}
 		// 从cookie记住获取
 		if($this->rememberOn)
 		{
-			if($this->checkCookie($isJumpToLogin))
+			if($this->checkCookie())
 			{
 				$this->setLoginStatus();
-			}
-			else
-			{
-				return false;
+				return true;
 			}
 		}
-		return true;
+		$this->parseCheckResult(false,$isJumpToLogin);
 	}
 	/**
 	 * 登录
@@ -133,7 +130,7 @@ class UserSession extends BaseModel
 		}
 		if($this->rememberOn)
 		{
-			$this->isRemember = (int)Request::post($this->rememberCookieHashFieldName);
+			$this->isRemember = (int)Request::post($this->rememberFieldName);
 		}
 		$this->setLoginStatus();
 		return true;
@@ -154,9 +151,10 @@ class UserSession extends BaseModel
 		Session::set($this->sessionName, $this->userInfo[$this->pk]);
 		if($this->isRemember)
 		{
-			Cookie::set($this->rememberCookieUIDFieldName,$this->userInfo[$this->rememberCookieUIDFieldNameFieldName]);
-			Cookie::set($this->rememberCookieTimeFieldName,$_SERVER['REQUEST_TIME']);
-			Cookie::set($this->rememberCookieHashFieldName,$this->parseCookieHash($this->userInfo[$this->rememberCookieUIDFieldNameFieldName],$_SERVER['REQUEST_TIME']));
+			$time = $_SERVER['REQUEST_TIME'] + $this->rememberTime;
+			Cookie::set($this->rememberCookieUIDFieldName,$this->userInfo[$this->rememberCookieUIDFieldNameFieldName],$time);
+			Cookie::set($this->rememberCookieTimeFieldName,$_SERVER['REQUEST_TIME'],$time);
+			Cookie::set($this->rememberCookieHashFieldName,$this->parseCookieHash($this->userInfo[$this->rememberCookieUIDFieldNameFieldName],$_SERVER['REQUEST_TIME']),$time);
 		}
 	}
 	/**
@@ -175,19 +173,19 @@ class UserSession extends BaseModel
 	 * @param type $isJumpToLogin
 	 * @return boolean
 	 */
-	private function checkSession($isJumpToLogin = false)
+	private function checkSession()
 	{
 		$sessionValue = Session::get($this->sessionName,false);
 		if(false === $sessionValue)
 		{
-			return $this->parseCheckResult(false,$isJumpToLogin);
+			return false;
 		}
 		// 获取用户数据
 		$this->userInfo = $this->getByPk($sessionValue);
 		// 判断是否有这个用户
 		if(!isset($this->userInfo[$this->pk]))
 		{
-			return $this->parseCheckResult(false,$isJumpToLogin);
+			return false;
 		}
 		return true;
 	}
@@ -204,16 +202,16 @@ class UserSession extends BaseModel
 		// 检测时间是否过期
 		if($time + $this->rememberTime < $_SERVER['REQUEST_TIME'])
 		{
-			return $this->parseCheckResult(false,$isJumpToLogin);
+			return false;
 		}
 		// 根据UID获取用户信息
 		$userInfo = $this->getBy($this->rememberCookieUIDFieldNameFieldName, $uid);
 		// 判断用户信息是否存在
 		if(!isset($userInfo[$this->pk]))
 		{
-			return $this->parseCheckResult(false,$isJumpToLogin);
+			return false;
 		}
-		return true;
+		return $hash === $this->parseCookieHash($userInfo[$this->rememberCookieUIDFieldNameFieldName],$time);
 	}
 	/**
 	 * 处理密码加盐

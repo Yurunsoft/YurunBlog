@@ -20,15 +20,15 @@
 				}
 				function getPostData()
 				{
-					return $('#form1').serialize();
+					return getFormJson('#form1');
 				}
 				function submit(e)
 				{
-					var formJson = getFormJson('#form1');
+					var formJson = getPostData();
 					$.ajax({
 					    type: "post",
 					    url: $('#form1').attr('action'), 
-					    data: getPostData(),
+					    data: formJson,
 					    success: function(data) {
 					        if(data.success)
 					        {

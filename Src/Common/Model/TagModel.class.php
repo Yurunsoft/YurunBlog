@@ -1,13 +1,13 @@
 <?php
 class TagModel extends BaseModel
 {
-	public function parseData(&$data)
+	public function __saveBefore(&$data)
 	{
-		parent::parseData($data);
 		if(isEmpty($data['Code']))
 		{
 			$data['Code'] = 'tag_' . uniqid();
 		}
+		return parent::__saveBefore($data);
 	}
 	/**
 	 * 处理查询条件

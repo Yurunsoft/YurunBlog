@@ -89,6 +89,48 @@ function onChangeSiteQueryBox()
 		$('[data-name="Ico'+$(_this).attr('data-name')+'"]').attr('src',data.IconUrl)
 	}});
 }
+var ModalHelper = (function (bodyCls) {
+	var scrollTop;
+	$(function(){
+		$('body').append('<style>body.modal-open {position: fixed;width: 100%;}</style>');
+	})
+	return {
+		afterOpen: function () {
+			scrollTop = document.scrollingElement.scrollTop;
+			document.body.classList.add(bodyCls);
+			document.body.style.top = -scrollTop + 'px';
+		},
+		beforeClose: function () {
+			document.body.style.top = 0;
+			document.body.classList.remove(bodyCls);
+			document.scrollingElement.scrollTop = scrollTop;
+		}
+	};
+})('modal-open');
+var lastSelectItem = null;
+$(function(){
+	$('body').on('click','.layui-form-select',function(){
+		if(null !== lastSelectItem)
+		{
+			lastSelectItem = null;
+			ModalHelper.beforeClose();
+		}
+		ModalHelper.afterOpen();
+		lastSelectItem = $(this);
+		var _this = lastSelectItem;
+		var h = setInterval(function(){
+			if(!$(_this).hasClass('layui-form-selected'))
+			{
+				if(_this === lastSelectItem)
+				{
+					lastSelectItem = null;
+					ModalHelper.beforeClose();
+				}
+				clearInterval(h);
+			}
+		},100);
+	});
+});
 $(function(){
 	$('.left-menu-toggle').click(function(){
 		var isShow = $('#left_nav').hasClass('show-item');

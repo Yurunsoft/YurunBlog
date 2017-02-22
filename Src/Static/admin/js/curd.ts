@@ -351,13 +351,21 @@ class PopupOption
     {
         var params = urlEncode(this.params);
         var size = this.size;
-        if(parseInt(size[0]) > $(this.popupContainer).innerWidth())
+        if($(this.popupContainer).innerWidth() < 768)
         {
-            size[0] = '100%'
+            size[0] = '100%';
+            size[1] = '100%';
         }
-        if(parseInt(size[1]) > $(this.popupContainer).innerHeight())
+        else
         {
-            size[1] = '100%'
+            if(parseInt(size[0]) > $(this.popupContainer).innerWidth())
+            {
+                size[0] = '100%'
+            }
+            if(parseInt(size[1]) > $(this.popupContainer).innerHeight())
+            {
+                size[1] = '100%'
+            }
         }
         this.layerIndex = this.popupContainer.layer.open({
             type : 2,

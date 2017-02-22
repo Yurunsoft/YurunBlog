@@ -20,7 +20,7 @@ return array(
 		'SAVEPATH'	=>	'Static/Upload/',
 	),
 	'TEMPLATE_CONSTS'			=>	array(
-		'__PLUGIN__'	=>	WEBROOT . '/Plugin'
+		'__PLUGIN__'	=>	'__WEBROOT__/Plugin'
 	),
 	'AUTOLOAD_RULES'	=>	array(
 		array('type'=>'FirstWord','word'=>'YC','path'=>'Lib/Component/%class'),

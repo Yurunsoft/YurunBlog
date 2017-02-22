@@ -57,7 +57,7 @@
 		bindFormElement:$('#form1')
 	});
 	$('.btn-add').click(function(){
-		var action = new PopupOption({url:'<url='add'/>',title:'新建分类',size:['1100px','425px'],onSuccess:function(data){
+		var action = new PopupOption({url:'<url='add'/>',title:'新建分类',size:['1100px','425px'],popupContainer:window.top,onSuccess:function(data){
 			queryOption.query();
 		}});
 	});

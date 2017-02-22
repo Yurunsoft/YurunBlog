@@ -653,7 +653,8 @@ a:hover
     width: 124px;
 }
 body#popup{
-	padding:10px
+	/*padding:10px*/
+	padding: 10px 0;
 }
 .layui-form-label{
 	box-sizing: content-box;
@@ -715,9 +716,6 @@ input[type="datetime-local"].layui-input,input[type="date"].layui-input{
     overflow-y: hidden;
     -ms-overflow-style: -ms-autohiding-scrollbar;
     border: none;
-}
-.layui-input-block{
-	line-height:36px;
 }
 .layui-input-block .layui-form-checkbox{
 	margin-bottom:0

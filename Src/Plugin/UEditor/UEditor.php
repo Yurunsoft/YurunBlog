@@ -1,5 +1,5 @@
 <?php
-class Ueditor extends Control
+class UEditor extends Control
 {
 	public function getEditor($data)
 	{
@@ -11,6 +11,6 @@ class Ueditor extends Control
 	}
 }
 Event::register('YB_EDITOR_UEDITOR',function($data){
-	$ueditor = new Ueditor;
+	$ueditor = new UEditor;
 	$ueditor->getEditor($data);
 });
