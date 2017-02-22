@@ -259,7 +259,7 @@ class BaseAPI
 			$deletePks = array_diff($oldPks,$pks);
 			if(!empty($deletePks))
 			{
-				$result = $option->model->where(array($pkName=>array('in',$deletePks)))->delete() ? true : '删除旧数据失败';
+				$result = $option->model->where(array($pkName=>array('in',$deletePks)))->delete() ? true : ('删除旧数据失败:' . $option->model->error);
 			}
 		}
 		return $result;
@@ -295,10 +295,10 @@ class BaseAPI
 			$option['model'] = $this->model;
 		}
 		$this->options = new APIOption($option);
-		$this->success = $this->options->model->where(array($this->options->model->pk()=>Request::post($this->options->pkFieldName)))->delete();
+		$this->success = $this->options->model->delete(Request::post($this->options->pkFieldName));
 		if(!$this->success)
 		{
-			$this->message = '删除失败';
+			$this->message = $this->options->model->error;
 		}
 	}
 	private function parseData(&$data)

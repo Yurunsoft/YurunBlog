@@ -1,13 +1,3 @@
-function random(Min,Max)
-{   
-	var Range = Max - Min;   
-	var Rand = Math.random();   
-	return(Min + Math.round(Rand * Range));   
-}
-Array.prototype.del = function(n) {
-	if (n < 0) return this;
-	else return this.slice(0, n).concat(this.slice(n + 1, this.length));
-}
 function bindBatch(url)
 {
 	$('[name=operate]').change(function(){
@@ -38,10 +28,6 @@ function bindBatch(url)
 		}
 		location = url + '&id=' + ids + '&operate=' + operate;
 	})
-}
-function parseLine(str)
-{
-	return str.split("\r\n").join('<br/>');
 }
 function parsePassword(password)
 {
@@ -80,22 +66,17 @@ $(document).ready(function(e) {
 		}
 	});
 });
-function onChangeSiteQueryBox()
-{
-	var _this = this;
-	var action = new PopupOption({url:'/Admin/Site/select',title:'选择站点',size:['600px','450px'],onSuccess:function(data){
-		$(_this).val(data.Name+"("+data.Url+")")
-		$('[name="'+$(_this).attr('data-name')+'"]').val(data.ID);
-		$('[data-name="Ico'+$(_this).attr('data-name')+'"]').attr('src',data.IconUrl)
-	}});
-}
 var ModalHelper = (function (bodyCls) {
 	var scrollTop;
-	$(function(){
-		$('body').append('<style>body.modal-open {position: fixed;width: 100%;}</style>');
-	})
 	return {
 		afterOpen: function () {
+			var style = '<style id="__YBStyleModal">body.modal-open {position: fixed;width: 100%;';
+			if(isScroll().scrollY)
+			{
+				style += 'overflow-y:scroll;';
+			}
+			style += '}</style>';
+			$('body').append(style);
 			scrollTop = document.scrollingElement.scrollTop;
 			document.body.classList.add(bodyCls);
 			document.body.style.top = -scrollTop + 'px';
@@ -104,6 +85,7 @@ var ModalHelper = (function (bodyCls) {
 			document.body.style.top = 0;
 			document.body.classList.remove(bodyCls);
 			document.scrollingElement.scrollTop = scrollTop;
+			$('#__YBStyleModal').remove();
 		}
 	};
 })('modal-open');
@@ -186,10 +168,10 @@ $(function(){
 		$('#left_nav').removeClass('show-item');
 	})
 	$('.menu-list > li.active').addClass('active').find('.sub-list').slideDown();
-	$('.site-query-box').click(onChangeSiteQueryBox);
 })
 var form;
 $(function(){
 	form = layui.form();
 	form.render();
+	// laydate.skin('molv');
 })

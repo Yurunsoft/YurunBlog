@@ -57,11 +57,21 @@ var urlEncode = function (param, key, encode) {
     return paramStr.substr(1);
 };
 function getFormJson(flag) {
+    var form = $(flag);
     var data = {};
-    var tData = $(flag).serializeArray();
+    var tData = form.serializeArray();
     for (var i = 0; i < tData.length; i++) {
         data[tData[i].name] = tData[i].value;
     }
+    form.find('input[type=checkbox]').each(function (index, elem) {
+        var e = $(elem);
+        if (!e.is(':checked')) {
+            var value = e.attr('un-checked-value');
+            if (void 0 !== value) {
+                data[e.attr('name')] = value;
+            }
+        }
+    });
     return data;
 }
 function parseCallback(callback) {
@@ -102,6 +112,13 @@ function databindFormElement(data, formElement) {
         if (element.length == 0) {
             continue;
         }
+        var filter = element.attr('filter');
+        if (void 0 === filter) {
+            var filterValue = data[key];
+        }
+        else {
+            var filterValue = window[filter](data[key]);
+        }
         switch (element.get(0).tagName.toUpperCase()) {
             case 'SELECT':
                 element.find('option[value=\'' + data[key] + '\']').prop('selected', true);
@@ -110,15 +127,17 @@ function databindFormElement(data, formElement) {
                 var type = element.attr('type').toUpperCase();
                 switch (type) {
                     case 'CHECKBOX':
-                        if (element.val() == data[key]) {
-                            element.attr('checked', true);
-                        }
+                        element.attr('checked', element.val() == data[key]);
                         break;
                     case 'DATETIME-LOCAL':
-                        element.val(val.replace(' ', 'T'));
+                        element.val(data[key].replace(' ', 'T'));
                         break;
                     case 'RADIO':
                         $('input[type=radio][name=' + key + '][value="' + data[key] + '"]').attr('checked', true);
+                        break;
+                    case 'NUMBER':
+                    case 'TEXT':
+                        element.val(filterValue);
                         break;
                     default:
                         var val = '';
@@ -135,7 +154,7 @@ function databindFormElement(data, formElement) {
                 }
                 break;
             case "TEXTAREA":
-                element.html(data[key]);
+                element.html(filterValue);
                 break;
             default:
                 element.html(data[key]);
@@ -344,7 +363,6 @@ var PopupOption = (function () {
             shade: 0.2,
             content: this.url + (this.url.indexOf('?') >= 0 ? '&' : '?') + params,
             maxmin: this.isMax,
-            scrollbar: false,
             full: function (e) {
                 maxLayers[e.attr('times')] = e;
             },

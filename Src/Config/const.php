@@ -4,6 +4,10 @@
  */
 define('TAG_TYPE','TAG_TYPE');
 /**
+ * 内容类型
+ */
+define('CONTENT_TYPE','CONTENT_TYPE');
+/**
  * 扩展数据类型
  */
 define('EX_DATA_TYPE','EX_DATA_TYPE');
@@ -31,6 +35,14 @@ define('CONTENT_STATUS_DRAFT',4);
  * 隐藏
  */
 define('CONTENT_STATUS_HIDE',5);
+/**
+ * 文章
+ */
+define('CONTENT_TYPE_ARTICLE',1);
+/**
+ * 页面
+ */
+define('CONTENT_TYPE_PAGE',2);
 /**
  * 文章
  */
@@ -70,6 +82,19 @@ return array (
     array (
       'value' => '5',
       'text' => '隐藏',
+    ),
+  ),
+  'CONTENT_TYPE' => 
+  array (
+    'CONTENT_TYPE_ARTICLE' => 
+    array (
+      'value' => '1',
+      'text' => '文章',
+    ),
+    'CONTENT_TYPE_PAGE' => 
+    array (
+      'value' => '2',
+      'text' => '页面',
     ),
   ),
   'EX_DATA_TYPE' => 

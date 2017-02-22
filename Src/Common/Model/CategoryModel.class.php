@@ -1,14 +1,15 @@
 <?php
 class CategoryModel extends CategoryBaseModel
 {
-	// public $itemTableName = '';
+	public $itemTableName = 'content';
 	public $itemTableNumFieldName = 'Articles';
 	public $itemTableCategoryFieldName = 'CategoryID';
 	public $exDataType = EX_DATA_TYPE_CATEGORY;
 	
 	public function __addBefore(&$data)
 	{
-		$result = Event::trigger('YB_ADD_CATEGORY_BEFORE',$data);
+		$params = array(&$data);
+		$result = Event::trigger('YB_ADD_CATEGORY_BEFORE',$params);
 		if(null !== $result && true !== $result)
 		{
 			return $result;
@@ -17,7 +18,8 @@ class CategoryModel extends CategoryBaseModel
 	}
 	public function __addAfter(&$data,$result)
 	{
-		$result = Event::trigger('YB_ADD_CATEGORY_AFTER',$data);
+		$params = array(&$data,$result);
+		$result = Event::trigger('YB_ADD_CATEGORY_AFTER',$params);
 		if(null !== $result && true !== $result)
 		{
 			return $result;
@@ -26,7 +28,8 @@ class CategoryModel extends CategoryBaseModel
 	}
 	public function __editBefore(&$data)
 	{
-		$result = Event::trigger('YB_EDIT_CATEGORY_BEFORE',$data);
+		$params = array(&$data);
+		$result = Event::trigger('YB_EDIT_CATEGORY_BEFORE',$params);
 		if(null !== $result && true !== $result)
 		{
 			return $result;
@@ -35,7 +38,8 @@ class CategoryModel extends CategoryBaseModel
 	}
 	public function __editAfter(&$data,$result)
 	{
-		$result = Event::trigger('YB_EDIT_CATEGORY_AFTER',$data);
+		$params = array(&$data,$result);
+		$result = Event::trigger('YB_EDIT_CATEGORY_AFTER',$params);
 		if(null !== $result && true !== $result)
 		{
 			return $result;
@@ -44,7 +48,8 @@ class CategoryModel extends CategoryBaseModel
 	}
 	public function __saveBefore(&$data)
 	{
-		$result = Event::trigger('YB_SAVE_CATEGORY_BEFORE',$data);
+		$params = array(&$data);
+		$result = Event::trigger('YB_SAVE_CATEGORY_BEFORE',$params);
 		if(null !== $result && true !== $result)
 		{
 			return $result;
@@ -61,7 +66,8 @@ class CategoryModel extends CategoryBaseModel
 	}
 	public function __saveAfter(&$data,$result)
 	{
-		$result = Event::trigger('YB_SAVE_CATEGORY_AFTER',$data);
+		$params = array(&$data,$result);
+		$result = Event::trigger('YB_SAVE_CATEGORY_AFTER',$params);
 		if(null !== $result && true !== $result)
 		{
 			return $result;
@@ -70,7 +76,8 @@ class CategoryModel extends CategoryBaseModel
 	}
 	public function __deleteBefore(&$pkData)
 	{
-		$result = Event::trigger('YB_DELETE_CATEGORY_BEFORE',$data);
+		$params = array(&$pkData);
+		$result = Event::trigger('YB_DELETE_CATEGORY_BEFORE',$params);
 		if(null !== $result && true !== $result)
 		{
 			return $result;
@@ -79,7 +86,8 @@ class CategoryModel extends CategoryBaseModel
 	}
 	public function __deleteAfter($result)
 	{
-		$result = Event::trigger('YB_DELETE_CATEGORY_AFTER',$data);
+		$params = array($result);
+		$result = Event::trigger('YB_DELETE_CATEGORY_AFTER',$params);
 		if(null !== $result && true !== $result)
 		{
 			return $result;

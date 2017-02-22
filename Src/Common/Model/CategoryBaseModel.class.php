@@ -11,13 +11,10 @@ abstract class CategoryBaseModel extends BaseModel
 	public $oldCategoryID = 0;
 	public function __saveBefore(&$data)
 	{
-		if(null !== $result && true !== $result)
-		{
-			return $result;
-		}
 		if(isEmpty($data['Name']))
 		{
-			return '分类名称不能为空';
+			$this->error = '分类名称不能为空';
+			return false;
 		}
 		if(0 == $data[$this->parentFieldName])
 		{
@@ -174,20 +171,20 @@ abstract class CategoryBaseModel extends BaseModel
 	 * @param type $categoryID
 	 * @param type $num
 	 */
-	public function addArticle($categoryID,$num = 1)
+	public function addItems($categoryID,$num = 1)
 	{
 		$ids = $this->getParentIds($categoryID);
-		return $this->where(array($this->pk=>array('in',$ids)))->inc(array('Articles'=>$num));
+		return $this->where(array($this->pk=>array('in',$ids)))->inc(array($this->itemTableNumFieldName=>$num));
 	}
 	/**
 	 * 减少站点数
 	 * @param type $categoryID
 	 * @param type $num
 	 */
-	public function deleteArticle($categoryID,$num = 1)
+	public function deleteItems($categoryID,$num = 1)
 	{
 		$ids = $this->getParentIds($categoryID);
-		return $this->where(array($this->pk=>array('in',$ids)))->dec(array('Articles'=>$num));
+		return $this->where(array($this->pk=>array('in',$ids)))->dec(array($this->itemTableNumFieldName=>$num));
 	}
 	/**
 	 * 更新父级
@@ -216,7 +213,7 @@ abstract class CategoryBaseModel extends BaseModel
 			return;
 		}
 		$tableName = $this->tableName();
-		$ItemTableName = $this->tableName($this->itemTableName);
+		$itemTableName = $this->tableName($this->itemTableName);
 		return $this->getDb()->execute(
 <<<SQL
 UPDATE {$tableName}
@@ -235,7 +232,7 @@ SET {$this->itemTableNumFieldName} = COALESCE (
 			) AS t
 	),
 	0
-) + (select count(*) from {$ItemTableName} where {$this->itemTableCategoryFieldName} = {$id})
+) + (select count(*) from {$itemTableName} where {$this->itemTableCategoryFieldName} = {$id})
 where {$this->pk} = {$id}
 SQL
 );

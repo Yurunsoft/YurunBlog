@@ -11,11 +11,11 @@
 	<table class="table" id="table">
 		<thead>
 			<tr>
-				<th width="80">ID</th>
-				<th>名称</th>
-				<th>别名</th>
-				<th>分类模版</th>
-				<th>文章模版</th>
+				<th width="60">ID</th>
+				<th width="200">名称</th>
+				<th width="100">别名</th>
+				<th width="100">分类模版</th>
+				<th width="100">文章模版</th>
 				<th width="80">文章数量</th>
 				<th width="100" class="center">操作</th>
 			</tr>
@@ -57,7 +57,7 @@
 		bindFormElement:$('#form1')
 	});
 	$('.btn-add').click(function(){
-		var action = new PopupOption({url:'<url='add'/>',title:'新建分类',size:['1100px','425px'],popupContainer:window.top,onSuccess:function(data){
+		var action = new PopupOption({url:'<url='add'/>',title:'新建分类',size:['1100px','425px'],onSuccess:function(data){
 			queryOption.query();
 		}});
 	});

@@ -44,6 +44,11 @@ class UserModel extends UserSession
 	{
 		if(isEmpty($data['Password']))
 		{
+			if(!isset($data['ID']))
+			{
+				$this->error = '请输入密码';
+				return false;
+			}
 			unset($data['Password']);
 		}
 		else
@@ -58,6 +63,6 @@ class UserModel extends UserSession
 	 */
 	public function saveProfile($data)
 	{
-		return $this->where(array('ID'=>$this->userInfo['ID']))->edit($data) ? true : '保存失败';
+		return $this->where(array('ID'=>$this->userInfo['ID']))->edit($data) ? true : $this->error;
 	}
 }

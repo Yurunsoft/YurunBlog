@@ -110,7 +110,8 @@ h3{
 }
 /*admin*/
 #admin,#admin body,#admin #body{
-	height:100%;
+	/*min-height:100%;*/
+	/*height:100%;*/
 }
 #admin body{
 	background-color:#f6f6f6;
@@ -223,6 +224,7 @@ h3{
     -ms-transition: left 0.5s ease;
     -o-transition: left 0.5s ease;
 	font-size: 0;
+	height:100%;
 }
 #admin #body_content{
 	padding:10px 20px 20px 20px
@@ -704,18 +706,21 @@ a.layui-btn:hover{
 input[type="datetime-local"].layui-input,input[type="date"].layui-input{
 	display:inline-flex
 }
-.table td,.table th{
-	white-space: nowrap;
-}
-.table td.wrap,.table th.wrap{
-	white-space: pre-wrap
-}
 .table-responsive {
     width: 100%;
     margin-bottom: 15px;
     overflow-y: hidden;
     -ms-overflow-style: -ms-autohiding-scrollbar;
     border: none;
+}
+.table{
+	table-layout:fixed;
+}
+.nowrap{
+	white-space: nowrap;
+}
+#admin .table th, #admin #body_content .table td{
+	word-wrap:break-word;
 }
 .layui-input-block .layui-form-checkbox{
 	margin-bottom:0

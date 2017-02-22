@@ -19,7 +19,7 @@
 				</div>
 			</div>
 			<div class="form-group">
-					<input type="text" name="query.Title" class="layui-input" placeholder="标题搜索"/>
+					<input type="text" name="query.Search" class="layui-input" placeholder="标题搜索"/>
 			</div>
 			<div class="form-group">
 				<button class="layui-btn"><i class="layui-icon">&#xe615;</i> 搜索</button>
@@ -46,8 +46,9 @@
 		</tbody>
 	</table>
 </div>
+<div id="pagebar"></div>
 <script id="template" type="text/html">
-{{# layui.each(parseTreeDataset(d.list,'ID','Parent',0), function(index, item){ }}
+{{# layui.each(d.list, function(index, item){ }}
 	<tr>
 		<td>{{ item.ID }}</td>
 		<td>{{ item.StatusText }}</td>
@@ -70,7 +71,8 @@
 		contentElement:$('#table tbody'),
 		queryUrl:'<Api runat="server" control="#__DYNAMIC_CONTROL__" action="query"/>',
 		isBindForm:true,
-		bindFormElement:$('#form1')
+		bindFormElement:$('#form1'),
+		pagebarElement:$('#pagebar'),
 	});
 	$('.btn-add').click(function(){
 		var action = new PopupOption({url:'<url='add'/>',title:'发布文章',isMax:true,onSuccess:function(data){
