@@ -1,0 +1,86 @@
+<div class="table-toolbar">
+	<form class="layui-form form-inline" id="form1">
+		<div class="pull-left">
+			<div class="form-group">
+				<a class="layui-btn layui-btn-primary btn-add"><i class="glyphicon glyphicon-plus green"></i> 新建页面</a>
+			</div>
+		</div>
+		<div class="pull-right">
+			<div class="form-group">
+				<div class="input-group">
+					<div class="input-group-addon">状态</div>
+					<select runat="server" data_func="BaseDict::get" data_func_args="#array(CONTENT_STATUS)" name="query.Status" first_item_text="不限" first_item_value="0"/>
+				</div>
+			</div>
+			<div class="form-group">
+					<input type="text" name="query.Search" class="layui-input" placeholder="标题搜索"/>
+			</div>
+			<div class="form-group">
+				<button class="layui-btn"><i class="layui-icon">&#xe615;</i> 搜索</button>
+			</div>
+		</div>
+	</form>
+</div>
+<div class="table-parent table-responsive cb">
+	<table class="table" id="table">
+		<thead>
+			<tr>
+				<th width="60">ID</th>
+				<th width="80">状态</th>
+				<th width="100">作者</th>
+				<th width="250">标题</th>
+				<th width="100">别名</th>
+				<th width="60">评论数</th>
+				<th width="150">发布时间</th>
+				<th width="150">更新时间</th>
+				<th width="100" class="center">操作</th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
+</div>
+<div id="pagebar"></div>
+<script id="template" type="text/html">
+{{# layui.each(d.list, function(index, item){ }}
+	<tr>
+		<td>{{ item.ID }}</td>
+		<td>{{ item.StatusText }}</td>
+		<td>{{ item.AuthorName }}</td>
+		<td>{{ item.Title }}</td>
+		<td>{{ item.Alias }}</td>
+		<td>{{ item.Comments }}</td>
+		<td>{{ item.PostTime }}</td>
+		<td>{{ item.UpdateTime }}</td>
+		<td class="center">
+			<button data-id="{{ item.ID }}" class="btn btn-sm btn-sm-edit glyphicon glyphicon-edit" title="编辑"></button>
+			<button data-id="{{ item.ID }}" class="btn btn-sm btn-sm-delete glyphicon glyphicon-remove" title="删除"></button>
+		</td>
+	</tr>
+{{#  }); }}
+</script>
+<script>
+	var queryOption = new QueryOption({
+		template:$('#template').html(),
+		contentElement:$('#table tbody'),
+		queryUrl:'<Api runat="server" control="#__DYNAMIC_CONTROL__" action="query"/>',
+		isBindForm:true,
+		bindFormElement:$('#form1'),
+		pagebarElement:$('#pagebar'),
+	});
+	$('.btn-add').click(function(){
+		var action = new PopupOption({url:'<url='add'/>',title:'新建页面',isMax:true,onSuccess:function(data){
+			queryOption.query();
+		}});
+	});
+	$('body').on('click','.btn-sm-edit',function(){
+		var action = new PopupOption({url:'<url='update'/>',params:{id:$(this).attr('data-id')},title:'编辑页面',isMax:true,onSuccess:function(data){
+			queryOption.query();
+		}});
+	})
+	$('body').on('click','.btn-sm-delete',function(){
+		var action = new ActionOption({url:'<Api runat="server" control="#__DYNAMIC_CONTROL__" action="delete"/>',params:{ID:$(this).attr('data-id')},onSuccess:function(data){
+			queryOption.query();
+		}});
+	})
+</script>

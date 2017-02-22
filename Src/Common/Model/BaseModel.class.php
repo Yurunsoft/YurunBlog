@@ -109,4 +109,19 @@ class BaseModel extends Model
 		}
 		return $data;
 	}
+	/**
+	 * 别名是否存在
+	 * @param string $alias
+	 * @param int $currID
+	 * @return bool
+	 */
+	public function aliasExists($alias,$currID = 0)
+	{
+		$where = array('Alias'=>$alias);
+		if(0 !== $currID)
+		{
+			$where['ID'] = array('<>',$currID);
+		}
+		return $this->where($where)->count() > 0;
+	}
 }

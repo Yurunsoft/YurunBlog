@@ -25,6 +25,7 @@ class ContentModel extends BaseModel
 	 */
 	public function parseCondition($data)
 	{
+		$this->where(array($this->tableName() . '.Type'=>$this->type));
 		if(!empty($data['CategoryID']))
 		{
 			$categoryModel = new CategoryModel;
@@ -57,6 +58,7 @@ class ContentModel extends BaseModel
 		{
 			$data['Author'] = Globals::$user['ID'];
 		}
+		$data['Type'] = $this->type;
 		return parent::__addBefore($data);
 	}
 	public function __addAfter(&$data,$result)
@@ -67,11 +69,14 @@ class ContentModel extends BaseModel
 		{
 			return $result;
 		}
-		$categoryModel = new CategoryModel;
-		if(!$categoryModel->addItems($data['CategoryID']))
+		if(!empty($data['CategoryID']))
 		{
-			$this->error = '增加分类文章数失败';
-			return false;
+			$categoryModel = new CategoryModel;
+			if(!$categoryModel->addItems($data['CategoryID']))
+			{
+				$this->error = '增加分类文章数失败';
+				return false;
+			}
 		}
 		return parent::__addAfter($data,$result);
 	}
@@ -83,13 +88,16 @@ class ContentModel extends BaseModel
 		{
 			return $result;
 		}
-		$info = $this->getByPk($data['ID']);
-		if(!isset($info['CategoryID']))
+		if(!empty($data['CategoryID']))
 		{
-			$this->error = '该内容不存在';
-			return false;
+			$info = $this->getByPk($data['ID']);
+			if(!isset($info['CategoryID']))
+			{
+				$this->error = '该内容不存在';
+				return false;
+			}
+			$this->lastCategoryID = $info['CategoryID'];
 		}
-		$this->lastCategoryID = $info['CategoryID'];
 		return parent::__editBefore($data);
 	}
 	public function __editAfter(&$data,$result)
@@ -100,13 +108,16 @@ class ContentModel extends BaseModel
 		{
 			return $result;
 		}
-		if($this->lastCategoryID != $data['CategoryID'])
+		if(!empty($data['CategoryID']))
 		{
-			$categoryModel = new CategoryModel;
-			if(!$categoryModel->deleteItems($this->lastCategoryID) || !$categoryModel->addItems($data['CategoryID']))
+			if($this->lastCategoryID != $data['CategoryID'])
 			{
-				$this->error = '处理分类文章数失败';
-				return false;
+				$categoryModel = new CategoryModel;
+				if(!$categoryModel->deleteItems($this->lastCategoryID) || !$categoryModel->addItems($data['CategoryID']))
+				{
+					$this->error = '处理分类文章数失败';
+					return false;
+				}
 			}
 		}
 		return parent::__editAfter($data,$result);
@@ -165,14 +176,16 @@ class ContentModel extends BaseModel
 		{
 			return $result;
 		}
-		Log::add($pkData);
 		$info = $this->getByPk($pkData);
 		if(!isset($info['CategoryID']))
 		{
 			$this->error = '该内容不存在';
 			return false;
 		}
-		$this->lastCategoryID = $info['CategoryID'];
+		if($info['CategoryID'] > 0)
+		{
+			$this->lastCategoryID = $info['CategoryID'];
+		}
 		return parent::__deleteBefore($pkData);
 	}
 	public function __deleteAfter($result)
@@ -183,11 +196,14 @@ class ContentModel extends BaseModel
 		{
 			return $result;
 		}
-		$categoryModel = new CategoryModel;
-		if(!$categoryModel->deleteItems($this->lastCategoryID))
+		if($this->lastCategoryID > 0)
 		{
-			$this->error = '处理分类文章数失败';
-			return false;
+			$categoryModel = new CategoryModel;
+			if(!$categoryModel->deleteItems($this->lastCategoryID))
+			{
+				$this->error = '处理分类文章数失败';
+				return false;
+			}
 		}
 		return parent::__deleteAfter($result);
 	}

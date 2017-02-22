@@ -1,0 +1,98 @@
+<form id="form1" class="layui-form layui-form-pane" action="<Api runat="server" control="#__DYNAMIC_CONTROL__" action="#__DYNAMIC_ACTION__"/>" method="post">
+	<div class="col-md-8 col-sm-6">
+		<div class="layui-form-item">
+			<label class="layui-form-label">标题 <span class="red">*</span></label>
+			<div class="layui-input-block">
+				<input type="text" name="Title" placeholder="文章标题" class="layui-input" filter="htmlspecialchars_decode"/>
+			</div>
+		</div>
+		<div class="layui-form-item" style="margin-bottom:0">
+			<label class="layui-form-label">内容</label>
+		</div>
+		<div class="layui-form-item">
+			<editor runat="server" name="Content" style="height:500px"/>
+		</div>
+		<div class="layui-form-item" style="margin-bottom:0">
+			<label class="layui-form-label">摘要</label>
+		</div>
+		<div class="layui-form-item">
+			<editor runat="server" name="Summary" style="height:150px"/>
+		</div>
+	</div>
+	<div class="col-md-4 col-sm-6">
+		<div class="layui-form-item">
+			<label class="layui-form-label">别名</label>
+			<div class="layui-input-block">
+				<input type="text" name="Alias" placeholder="文章别名" class="layui-input"/>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">顺序</label>
+			<div class="layui-input-block">
+				<input type="text" name="Index" placeholder="前-后：0-255" value="0" class="layui-input"/>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">文章模版</label>
+			<div class="layui-input-block">
+				<select runat="server" name="Template" data_func="getArticleTemplates" text_field="value"/>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">状态</label>
+			<div class="layui-input-block">
+				<select runat="server" data_func="BaseDict::get" data_func_args="#array(CONTENT_STATUS)" name="Status"/>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">标签</label>
+			<div class="layui-input-block">
+				<input type="text" name="Tags" placeholder="文章标签，以半角逗号分隔" class="layui-input"/>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">SEO关键词</label>
+			<div class="layui-input-block">
+				<input type="text" name="Keywords" placeholder="关键词，用于SEO优化" class="layui-input" filter="htmlspecialchars_decode"/>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">SEO描述</label>
+			<div class="layui-input-block">
+				<textarea name="Description" class="layui-textarea" placeholder="描述，用于SEO优化" filter="htmlspecialchars_decode"></textarea>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">发布时间</label>
+			<div class="layui-input-block">
+				<DateTimeBox runat="server" name="PostTime" class="layui-input" format="YYYY-MM-DD hh:mm:ss" is_time="1" placeholder="留空则为提交时间"/>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">更新时间</label>
+			<div class="layui-input-block">
+				<DateTimeBox runat="server" name="UpdateTime" class="layui-input" format="YYYY-MM-DD hh:mm:ss" is_time="1" placeholder="留空则为提交时间"/>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">其它</label>
+			<div class="layui-input-block">
+				<input type="checkbox" name="CanComment" value="1" un-checked-value="0" title="允许评论" checked/>
+      			<input type="checkbox" name="Top" value="1" un-checked-value="0" title="置顶"/>
+			</div>
+		</div>
+		<div class="center">
+			<if condition="isset($_GET['id'])">
+				<input type="hidden" name="ID"/>
+			</if>
+			<button class="layui-btn" lay-submit style="width:100%">发　布</button>
+		</div>
+	</div>
+</form>
+<script>
+	<if condition="isset($_GET['id'])">
+	$(function(){
+		var fo = new FindOption({url:'<Api runat="server" control="#__DYNAMIC_CONTROL__" action="find"/>',params:{ID:<%=Request::get('id')%>},formElement:$('#form1')});
+	});
+	</if>
+</script>
