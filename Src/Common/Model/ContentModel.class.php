@@ -45,10 +45,29 @@ class ContentModel extends BaseModel
 	public function __addBefore(&$data)
 	{
 		$params = array(&$data);
-		$result = Event::trigger('YB_ADD_ARTICLE_BEFORE',$params);
-		if(null !== $result && true !== $result)
+		$eventResult = Event::trigger('YB_ADD_ARTICLE_BEFORE',$params);
+		if(null !== $eventResult && true !== $eventResult)
 		{
-			return $result;
+			return $eventResult;
+		}
+		if(isEmpty($data['Alias']))
+		{
+			$data['Alias'] = uniqid('',true);
+			$data['AliasAuto'] = true;
+		}
+		else if(Validator::regex($data['Alias'],'/^\d+$/'))
+		{
+			$this->error = '别名不能为纯数字';
+			return false;
+		}
+		else
+		{
+			$data['AliasAuto'] = false;
+			if($this->aliasExists($data['Alias']))
+			{
+				$this->error = '别名已被使用';
+				return false;
+			}
 		}
 		if(isEmpty($data['PostTime']))
 		{
@@ -64,10 +83,14 @@ class ContentModel extends BaseModel
 	public function __addAfter(&$data,$result)
 	{
 		$params = array(&$data,$result);
-		$result = Event::trigger('YB_ADD_ARTICLE_AFTER',$params);
-		if(null !== $result && true !== $result)
+		$eventResult = Event::trigger('YB_ADD_ARTICLE_AFTER',$params);
+		if(null !== $eventResult && true !== $eventResult)
 		{
-			return $result;
+			return $eventResult;
+		}
+		if($data['AliasAuto'] && !$this->wherePk($result)->edit(array('ID'=>$result,'Alias'=>$result)))
+		{
+			return false;
 		}
 		if(!empty($data['CategoryID']))
 		{
@@ -83,10 +106,30 @@ class ContentModel extends BaseModel
 	public function __editBefore(&$data)
 	{
 		$params = array(&$data);
-		$result = Event::trigger('YB_EDIT_ARTICLE_BEFORE',$params);
-		if(null !== $result && true !== $result)
+		$eventResult = Event::trigger('YB_EDIT_ARTICLE_BEFORE',$params);
+		if(null !== $eventResult && true !== $eventResult)
 		{
-			return $result;
+			return $eventResult;
+		}
+		if(isset($data['Alias']))
+		{
+			if('' === $data['Alias'])
+			{
+				$data['Alias'] = $data['ID'];
+			}
+			else
+			{
+				if($data['Alias'] != $data['ID'] && Validator::regex($data['Alias'],'/^\d+$/'))
+				{
+					$this->error = '别名不能为纯数字';
+					return false;
+				}
+				if($this->aliasExists($data['Alias'],$data['ID']))
+				{
+					$this->error = '别名已被使用';
+					return false;
+				}
+			}
 		}
 		if(!empty($data['CategoryID']))
 		{
@@ -103,10 +146,10 @@ class ContentModel extends BaseModel
 	public function __editAfter(&$data,$result)
 	{
 		$params = array(&$data,$result);
-		$result = Event::trigger('YB_EDIT_ARTICLE_AFTER',$params);
-		if(null !== $result && true !== $result)
+		$eventResult = Event::trigger('YB_EDIT_ARTICLE_AFTER',$params);
+		if(null !== $eventResult && true !== $eventResult)
 		{
-			return $result;
+			return $eventResult;
 		}
 		if(!empty($data['CategoryID']))
 		{
@@ -125,17 +168,20 @@ class ContentModel extends BaseModel
 	public function __saveBefore(&$data)
 	{
 		$params = array(&$data);
-		$result = Event::trigger('YB_SAVE_ARTICLE_BEFORE',$params);
-		if(null !== $result && true !== $result)
+		$eventResult = Event::trigger('YB_SAVE_ARTICLE_BEFORE',$params);
+		if(null !== $eventResult && true !== $eventResult)
 		{
-			return $result;
+			return $eventResult;
 		}
-		if(isEmpty($data['Title']))
+		if(isset($data['Title']))
 		{
-			$this->error = '标题不能为空';
-			return false;
+			if('' === $data['Title'])
+			{
+				$this->error = '标题不能为空';
+				return false;
+			}
+			$data['Title'] = htmlspecialchars($data['Title']);
 		}
-		$data['Title'] = htmlspecialchars($data['Title']);
 		if(isEmpty($data['UpdateTime']))
 		{
 			$data['UpdateTime'] = date('Y-m-d H:i:s');
@@ -161,20 +207,20 @@ class ContentModel extends BaseModel
 	public function __saveAfter(&$data,$result)
 	{
 		$params = array(&$data,$result);
-		$result = Event::trigger('YB_SAVE_ARTICLE_AFTER',$params);
-		if(null !== $result && true !== $result)
+		$eventResult = Event::trigger('YB_SAVE_ARTICLE_AFTER',$params);
+		if(null !== $eventResult && true !== $eventResult)
 		{
-			return $result;
+			return $eventResult;
 		}
 		return parent::__saveAfter($data,$result);
 	}
 	public function __deleteBefore(&$pkData)
 	{
 		$params = array(&$pkData);
-		$result = Event::trigger('YB_DELETE_ARTICLE_BEFORE',$params);
-		if(null !== $result && true !== $result)
+		$eventResult = Event::trigger('YB_DELETE_ARTICLE_BEFORE',$params);
+		if(null !== $eventResult && true !== $eventResult)
 		{
-			return $result;
+			return $eventResult;
 		}
 		$info = $this->getByPk($pkData);
 		if(!isset($info['CategoryID']))
@@ -191,10 +237,10 @@ class ContentModel extends BaseModel
 	public function __deleteAfter($result)
 	{
 		$params = array($result);
-		$result = Event::trigger('YB_DELETE_ARTICLE_AFTER',$params);
-		if(null !== $result && true !== $result)
+		$eventResult = Event::trigger('YB_DELETE_ARTICLE_AFTER',$params);
+		if(null !== $eventResult && true !== $eventResult)
 		{
-			return $result;
+			return $eventResult;
 		}
 		if($this->lastCategoryID > 0)
 		{

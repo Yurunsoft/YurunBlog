@@ -32,12 +32,37 @@ a:hover,a:active{
 	color:#c2c2c2
 }
 
+.article-view{
+
+}
+.article-view h1{
+	
+}
+
+.article-info{
+}
+.article-info > span{
+	margin-right:8px
+}
+.article-info > span > .glyphicon{
+	color:#888;
+	margin-right:4px;
+}
+.article-info > .time{
+}
+.article-info > .author{
+}
+.article-info > .category{
+}
+
 .article-content img{
 	max-width:100%;
 }
 .article-content{
 	line-height:24px;
+	overflow: hidden;
 }
+
 .article-list-img-text{
 
 }
@@ -53,21 +78,6 @@ a:hover,a:active{
 }
 .article-list-img-text > li > h2 > a:hover{
 	color:#5FB878
-}
-.article-list-img-text > li > .article-info{
-}
-.article-list-img-text > li > .article-info > span{
-	margin-right:8px
-}
-.article-list-img-text > li > .article-info > span > .glyphicon{
-	color:#888;
-	margin-right:4px;
-}
-.article-list-img-text > li > .article-info > .time{
-}
-.article-list-img-text > li > .article-info > .author{
-}
-.article-list-img-text > li > .article-info > .category{
 }
 .article-list-img-text > li > .article-content{
 	margin-top:6px;
@@ -88,7 +98,7 @@ a:hover,a:active{
 .article-list-text li > a{
 	color: #2F4056;
     margin-left: 4px;
-    width: 280px;
+    width: 276px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
