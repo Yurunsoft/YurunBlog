@@ -39,5 +39,4 @@ return array(
 		'passwordFieldName'		=>	'Password',
 		'loginUrlMCA'			=>	'Index/login'
 	),
-	'THEME_ON' => false,
 );

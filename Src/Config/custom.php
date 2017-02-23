@@ -11,4 +11,5 @@ return array(
 	'JS_CACHE_TIME'			=> 1,
 	'EDITOR_TYPE'			=> 'ueditor',
 	'THEME' 				=> 'Default',
+	'THEME_ON'				=> true
 );
