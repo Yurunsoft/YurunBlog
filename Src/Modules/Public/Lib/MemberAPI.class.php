@@ -33,7 +33,7 @@ class MemberAPI extends BaseAPI
 	 */
 	public function profile()
 	{
-		$m = AdminUserModel::getInstance();
+		$m = UserModel::getInstance();
 		$data = Request::post();
 		$result = $m->saveProfile($data);
 		$this->success = (true === $result);
