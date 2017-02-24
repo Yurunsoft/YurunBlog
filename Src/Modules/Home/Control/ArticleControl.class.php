@@ -23,7 +23,7 @@ class ArticleControl extends HomeBaseControl
 	 * 文章列表
 	 * @param string $Alias 
 	 */
-	public function list($Alias,$page = 1)
+	public function _R_list($Alias,$page = 1)
 	{
 		$categoryModel = new CategoryModel;
 		$categoryInfo = $categoryModel->getByAlias($Alias);
