@@ -87,8 +87,9 @@ a:hover,a:active{
 	max-width:100%;
 }
 .article-content{
-	line-height:24px;
 	overflow: hidden;
+	font-size: 1pc;
+    line-height: 30px;
 }
 
 .article-list-img-text{

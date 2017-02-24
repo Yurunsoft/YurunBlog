@@ -306,7 +306,7 @@
            removeEmptyline: false,         //去掉空行
            textAlign:"left",               //段落的排版方式，可以是 left,right,center,justify 去掉这个属性表示不执行排版
            imageBlockLine: 'center',       //图片的浮动方式，独占一行剧中,左右浮动，默认: center,left,right,none 去掉这个属性表示不执行排版
-           pasteFilter: true,             //根据规则过滤没事粘贴进来的内容
+           pasteFilter: false,             //根据规则过滤没事粘贴进来的内容
            clearFontSize: true,           //去掉所有的内嵌字号，使用编辑器默认的字号
            clearFontFamily: true,         //去掉所有的内嵌字体，使用编辑器默认的字体
            removeEmptyNode: true,         // 去掉空节点
