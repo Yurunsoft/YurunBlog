@@ -167,6 +167,11 @@ a:hover,a:active{
 }
 /* 分页条结束 */
 
+h1.bread{
+	font-size: 2.5rem;
+	line-height: inherit;
+}
+
 footer {
     color: #fff;
     text-align: center;

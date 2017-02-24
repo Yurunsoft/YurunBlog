@@ -9,6 +9,11 @@
 		<include name="/header"/>
 		<div id="main" class="container">
 			<div id="left-box" class="content-container">
+				<div class="layui-tab layui-tab-brief">
+					<ul class="layui-tab-title">
+						<li class="layui-this"><h1 class="bread"><%=$categoryInfo['Name']%></h1></li>
+					</ul>
+				</div>
 				<ul class="article-list-img-text">
 					<foreach list="$articleList">
 					<li>
