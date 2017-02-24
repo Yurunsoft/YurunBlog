@@ -97,10 +97,13 @@
 </form>
 <script>
 	<if condition="isset($_GET['id'])">
-	$(function(){
-		var fo = new FindOption({url:'<Api runat="server" control="#__DYNAMIC_CONTROL__" action="find"/>',params:{ID:<%=Request::get('id')%>},formElement:$('#form1'),onSuccess:function(){
-			$('input[name=UpdateTime]').val('')
+	var onEditorReady = function(){
+		onEditorReady = null;
+		var fo = new FindOption({url:'<Api runat="server" control="#__DYNAMIC_CONTROL__" action="find"/>',params:{ID:<%=Request::get('id')%>},formElement:$('#form1'),onSuccess:function(data){
+			$('input[name=UpdateTime]').val('');
+			setEditorContent(editor_Content,data.data.Content);
+			setEditorContent(editor_Summary,data.data.Summary);
 		}});
-	});
+	}
 	</if>
 </script>

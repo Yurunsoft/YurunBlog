@@ -15,5 +15,9 @@ $(function(){
 		$varName = 'editor_' . $data['name'];
 	</php>
 	<%=$varName%> = UE.getEditor('<%=$data['name']%>');
+	if(onEditorReady !== void 0)
+	{
+		<%=$varName%>.ready(onEditorReady);
+	}
 });
 </script>
