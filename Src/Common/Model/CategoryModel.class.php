@@ -9,10 +9,10 @@ class CategoryModel extends CategoryBaseModel
 	public function __addBefore(&$data)
 	{
 		$params = array(&$data);
-		$result = Event::trigger('YB_ADD_CATEGORY_BEFORE',$params);
-		if(null !== $result && true !== $result)
+		$eventResult = Event::trigger('YB_ADD_CATEGORY_BEFORE',$params);
+		if(null !== $eventResult && true !== $eventResult)
 		{
-			return $result;
+			return $eventResult;
 		}
 		if(isEmpty($data['Alias']))
 		{
@@ -38,10 +38,10 @@ class CategoryModel extends CategoryBaseModel
 	public function __addAfter(&$data,$result)
 	{
 		$params = array(&$data,$result);
-		$result = Event::trigger('YB_ADD_CATEGORY_AFTER',$params);
-		if(null !== $result && true !== $result)
+		$eventResult = Event::trigger('YB_ADD_CATEGORY_AFTER',$params);
+		if(null !== $eventResult && true !== $eventResult)
 		{
-			return $result;
+			return $eventResult;
 		}
 		if($data['AliasAuto'] && !$this->wherePk($result)->edit(array('ID'=>$result,'Alias'=>$result)))
 		{
@@ -52,10 +52,10 @@ class CategoryModel extends CategoryBaseModel
 	public function __editBefore(&$data)
 	{
 		$params = array(&$data);
-		$result = Event::trigger('YB_EDIT_CATEGORY_BEFORE',$params);
-		if(null !== $result && true !== $result)
+		$eventResult = Event::trigger('YB_EDIT_CATEGORY_BEFORE',$params);
+		if(null !== $eventResult && true !== $eventResult)
 		{
-			return $result;
+			return $eventResult;
 		}
 		if(isset($data['Alias']))
 		{
@@ -82,20 +82,20 @@ class CategoryModel extends CategoryBaseModel
 	public function __editAfter(&$data,$result)
 	{
 		$params = array(&$data,$result);
-		$result = Event::trigger('YB_EDIT_CATEGORY_AFTER',$params);
-		if(null !== $result && true !== $result)
+		$eventResult = Event::trigger('YB_EDIT_CATEGORY_AFTER',$params);
+		if(null !== $eventResult && true !== $eventResult)
 		{
-			return $result;
+			return $eventResult;
 		}
 		return parent::__editAfter($data,$result);
 	}
 	public function __saveBefore(&$data)
 	{
 		$params = array(&$data);
-		$result = Event::trigger('YB_SAVE_CATEGORY_BEFORE',$params);
-		if(null !== $result && true !== $result)
+		$eventResult = Event::trigger('YB_SAVE_CATEGORY_BEFORE',$params);
+		if(null !== $eventResult && true !== $eventResult)
 		{
-			return $result;
+			return $eventResult;
 		}
 		if(isset($data['IsShow']))
 		{
@@ -105,35 +105,42 @@ class CategoryModel extends CategoryBaseModel
 		{
 			$data['NavigationShow'] = (int)$data['NavigationShow'];
 		}
+		if(isset($data['Title']))
+		{
+			if('' === $data['Title'])
+			{
+				$data['Title'] = $data['Name'];
+			}
+		}
 		return parent::__saveBefore($data);
 	}
 	public function __saveAfter(&$data,$result)
 	{
 		$params = array(&$data,$result);
-		$result = Event::trigger('YB_SAVE_CATEGORY_AFTER',$params);
-		if(null !== $result && true !== $result)
+		$eventResult = Event::trigger('YB_SAVE_CATEGORY_AFTER',$params);
+		if(null !== $eventResult && true !== $eventResult)
 		{
-			return $result;
+			return $eventResult;
 		}
 		return parent::__saveAfter($data,$result);
 	}
 	public function __deleteBefore(&$pkData)
 	{
 		$params = array(&$pkData);
-		$result = Event::trigger('YB_DELETE_CATEGORY_BEFORE',$params);
-		if(null !== $result && true !== $result)
+		$eventResult = Event::trigger('YB_DELETE_CATEGORY_BEFORE',$params);
+		if(null !== $eventResult && true !== $eventResult)
 		{
-			return $result;
+			return $eventResult;
 		}
 		return parent::__deleteBefore($pkData);
 	}
 	public function __deleteAfter($result)
 	{
 		$params = array($result);
-		$result = Event::trigger('YB_DELETE_CATEGORY_AFTER',$params);
-		if(null !== $result && true !== $result)
+		$eventResult = Event::trigger('YB_DELETE_CATEGORY_AFTER',$params);
+		if(null !== $eventResult && true !== $eventResult)
 		{
-			return $result;
+			return $eventResult;
 		}
 		return parent::__deleteAfter($result);
 	}

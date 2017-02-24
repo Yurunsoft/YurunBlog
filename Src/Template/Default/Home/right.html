@@ -5,24 +5,11 @@
 		</ul>
 		<div class="layui-tab-content">
 			<ul class="article-list-text">
+				<foreach list="$rightNewest">
 				<li>
-					<span class="before-title">[02/23]</span><a href="" target="_blank">我是一个标题啦啦啦啦啦啦啦啦我是一个标题啦啦啦啦啦啦啦啦</a>
+					<span class="before-title">[<%=date('m/d',strtotime($value['UpdateTime']))%>]</span><a href="<%=$value['Url']%>" target="_blank"><%=$value['Title']%></a>
 				<li>
-				<li>
-					<span class="before-title">[02/23]</span><a href="" target="_blank">我是一个标题啦啦啦啦啦啦啦啦</a>
-				<li>
-				<li>
-					<span class="before-title">[02/23]</span><a href="" target="_blank">我是一个标题啦啦啦啦啦啦啦啦</a>
-				<li>
-				<li>
-					<span class="before-title">[02/23]</span><a href="" target="_blank">我是一个标题啦啦啦啦啦啦啦啦</a>
-				<li>
-				<li>
-					<span class="before-title">[02/23]</span><a href="" target="_blank">我是一个标题啦啦啦啦啦啦啦啦</a>
-				<li>
-				<li>
-					<span class="before-title">[02/23]</span><a href="" target="_blank">我是一个标题啦啦啦啦啦啦啦啦</a>
-				<li>
+				</foreach>
 			</ul>
 		</div>
 		<ul class="layui-tab-title">

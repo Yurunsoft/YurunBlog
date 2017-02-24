@@ -36,6 +36,12 @@ a:hover,a:active{
 	color:#c2c2c2
 }
 
+.title{
+	padding-left:8px;
+	border-left: 5px solid #009688;
+	background-color: #fafafa;
+}
+
 .article-view{
 
 }
@@ -85,10 +91,7 @@ a:hover,a:active{
 .article-list-img-text > li > h2{
 	font-size:2rem;
 	line-height:36px;
-	border-left: 5px solid #009688;
-	padding-left:8px;
 	margin-bottom:5px;
-	background-color: #fafafa;
 }
 .article-list-img-text > li > h2 > a{
 	color:#2F4056

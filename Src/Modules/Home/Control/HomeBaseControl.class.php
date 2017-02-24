@@ -7,8 +7,11 @@ abstract class HomeBaseControl extends BaseControl
 		$params = array('control'=>&$this);
 		Event::trigger('YB_HOME_ONLOAD',$params);
 	}
-	protected function parseTitle($params = array(),$nameSuffix = '')
+	protected function parseHeadInfo($params = array(),$nameSuffix = '')
 	{
-		$this->view->title = getTitle(Config::get('@.TITLES.' . Dispatch::control() . '/' . Dispatch::action() . ('' === $nameSuffix ? '' : ('/' . $nameSuffix))),$params);
+		$ca = Dispatch::control() . '/' . Dispatch::action();
+		$this->view->title = getRuleResult(Config::get('@.TITLES.' . $ca . ('' === $nameSuffix ? '' : ('/' . $nameSuffix))),$params);
+		$this->view->seoDescription = getRuleResult(Config::get('@.SEO_DESCRIPTION.' . $ca),$params);
+		$this->view->seoKeywords = getRuleResult(Config::get('@.SEO_KEYWORDS.' . $ca),$params);
 	}
 }

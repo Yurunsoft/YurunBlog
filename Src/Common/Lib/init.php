@@ -41,3 +41,12 @@ Event::register('YB_HOME_ONLOAD',function($data){
 	$categoryModel = new CategoryModel();
 	$data['control']->view->categorys = $categoryModel->onlyGetShow()->getAssocList();
 });
+/**
+ * 加载主题的自定义处理文件
+ */
+$file = APP_TEMPLATE . Config::get('@.THEME') . '/theme.php';
+if(is_file($file))
+{
+    include_once $file;
+}
+unset($file);

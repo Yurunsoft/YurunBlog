@@ -20,7 +20,18 @@ return array(
 		'Article/list/first'=>	'{Category.Title} - {SYSTEM_NAME}',
 		'Article/list'		=>	'{Category.Title} - 第{CurrPage}页 - {SYSTEM_NAME}',
 	),
+	'SEO_DESCRIPTION'		=>	array(
+		'Index/index'		=>	'首页SEO描述',
+		'Article/view'		=>	'{Article.Description}',
+		'Article/list'		=>	'{Category.Description}'
+	),
+	'SEO_KEYWORDS'			=>	array(
+		'Index/index'		=>	'SEO关键词',
+		'Article/view'		=>	'{Article.Keywords}',
+		'Article/list'		=>	'{Category.Keywords}'
+	),
 	'SHOW_NUMBER'	=>	array(
-		'Home'	=>	10,
+		'Home'			=>	10,
+		'ArticleList'	=>	10,
 	)
 );

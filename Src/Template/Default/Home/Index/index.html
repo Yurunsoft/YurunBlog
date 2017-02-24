@@ -12,7 +12,7 @@
 				<ul class="article-list-img-text">
 					<foreach list="$articleList">
 					<li>
-						<h2><a href="<%=$value['Url']%>" target="_blank"><%=$value['Title']%></a></h2>
+						<h2 class="title"><a href="<%=$value['Url']%>" target="_blank"><%=$value['Title']%></a></h2>
 						<div class="article-info">
 							<span class="time"><i class="glyphicon glyphicon-time"></i><%=$value['UpdateTime']%></span>
 							<span class="author"><i class="glyphicon glyphicon-user"></i><a href="javascript:layer.alert('正在玩命开发中……',{icon:6});"><%=$value['AuthorName']%></a></span>
@@ -24,7 +24,7 @@
 					</li>
 					</foreach>
 				</ul>
-				<pagebar runat="server" only_first_page_show="#false"/>
+				<pagebar runat="server" only_first_page_show="#false" curr_page="#$currPage" total_pages="#$totalPages"/>
 			</div>
 			<include name="/right"/>
 		</div>

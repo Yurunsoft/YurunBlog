@@ -254,4 +254,16 @@ class ContentModel extends BaseModel
 		}
 		return parent::__deleteAfter($result);
 	}
+	public function homeSelect()
+	{
+		return $this->where(array('Status'=>CONTENT_STATUS_NORMAL));
+	}
+	public function orderByNew()
+	{
+		return $this->order(array(
+			'Top'			=>	'desc',
+			'Index',
+			'UpdateTime'	=>	'desc'
+		));
+	}
 }

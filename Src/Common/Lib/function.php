@@ -229,7 +229,13 @@ function &getArticleTemplates()
 	);
 	return $result;
 }
-function getTitle($rule,$params = array())
+/**
+ * 获取YurunBlog自定义规则的文本结果
+ * @param string $rule 
+ * @param array $params 
+ * @return string 
+ */
+function getRuleResult($rule,$params = array())
 {
 	return preg_replace_callback(
 					'/{([^}]+)}/',

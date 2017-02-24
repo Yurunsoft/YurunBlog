@@ -11,10 +11,13 @@ abstract class CategoryBaseModel extends BaseModel
 	public $oldCategoryID = 0;
 	public function __saveBefore(&$data)
 	{
-		if(isEmpty($data['Name']))
+		if(isset($data['Name']))
 		{
-			$this->error = '分类名称不能为空';
-			return false;
+			if(isEmpty($data['Name']))
+			{
+				$this->error = '分类名称不能为空';
+				return false;
+			}
 		}
 		if(0 == $data[$this->parentFieldName])
 		{
@@ -30,7 +33,7 @@ abstract class CategoryBaseModel extends BaseModel
 			$info = $this->getByPk($data[$this->pk]);
 			$this->oldCategoryID = $info[$this->parentFieldName];
 		}
-		return parent::__saveBefore();
+		return parent::__saveBefore($data);
 	}
 	public function __addAfter(&$data,$result)
 	{
@@ -44,7 +47,10 @@ abstract class CategoryBaseModel extends BaseModel
 	}
 	public function __saveAfter(&$data,$result)
 	{
-		$this->updateParent($data[$this->parentFieldName]);
+		if(null !== $this->oldCategoryID && isset($data[$this->parentFieldName]))
+		{
+			$this->updateParent($data[$this->parentFieldName]);
+		}
 		return parent::__saveAfter($data,$result);
 	}
 	/**

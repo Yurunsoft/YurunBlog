@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50547
 File Encoding         : 65001
 
-Date: 2017-02-22 17:49:55
+Date: 2017-02-24 17:05:13
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -36,31 +36,12 @@ CREATE TABLE `yb_category` (
   `Level` int(11) NOT NULL DEFAULT '0' COMMENT '层级',
   PRIMARY KEY (`ID`),
   KEY `alias` (`Alias`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of yb_category
 -- ----------------------------
-INSERT INTO `yb_category` VALUES ('1', '0', '0', '软件', '1', '2', '3', '0', '', 'soft', 'default', 'default', '', '0');
-INSERT INTO `yb_category` VALUES ('2', '1', '0', '电脑软件', '', '', '', '0', '', 'pcsoft', 'default', 'default', '\0', '1');
-INSERT INTO `yb_category` VALUES ('3', '1', '0', '安卓软件', '', '', '', '0', '', '', 'default', 'default', '\0', '1');
-INSERT INTO `yb_category` VALUES ('4', '0', '2', '技术杂谈', '', '', '', '0', '', '', 'default', 'default', '\0', '0');
-INSERT INTO `yb_category` VALUES ('5', '4', '1', '编程语言', '', '', '', '0', '', '', 'default', 'default', '\0', '1');
-INSERT INTO `yb_category` VALUES ('6', '4', '0', '数据库', '', '', '', '0', '', '', 'default', 'default', '\0', '1');
-INSERT INTO `yb_category` VALUES ('7', '5', '0', 'PHP', '', '', '', '0', '', '', 'default', 'default', '\0', '3');
-INSERT INTO `yb_category` VALUES ('8', '5', '0', 'C#', '', '', '', '0', '', '', 'default', 'default', '\0', '3');
-INSERT INTO `yb_category` VALUES ('9', '5', '0', 'C++', '', '', '', '0', '', '', 'default', 'default', '\0', '3');
-INSERT INTO `yb_category` VALUES ('10', '6', '0', 'MySQL', '', '', '', '0', '', '', 'default', 'default', '\0', '2');
-INSERT INTO `yb_category` VALUES ('11', '6', '0', 'SQL Server', '', '', '', '0', '', '', 'default', 'default', '\0', '2');
-INSERT INTO `yb_category` VALUES ('12', '5', '1', '易语言', '', '', '', '0', '', '', 'default', 'default', '\0', '3');
-INSERT INTO `yb_category` VALUES ('14', '12', '1', 'test', '', '', '', '0', '', '', 'default', 'default', '\0', '4');
-INSERT INTO `yb_category` VALUES ('17', '14', '1', 'test2', '', '', '', '2', '', '', 'default', 'default', '\0', '5');
-INSERT INTO `yb_category` VALUES ('18', '17', '1', 'test3', '', '', '', '0', '', '', 'default', 'default', '\0', '6');
-INSERT INTO `yb_category` VALUES ('19', '18', '1', 'test4', '', '', '', '0', '', '', 'default', 'default', '\0', '7');
-INSERT INTO `yb_category` VALUES ('20', '19', '1', 'test5', '', '', '', '0', '', '', 'default', 'default', '\0', '8');
-INSERT INTO `yb_category` VALUES ('21', '20', '1', 'test6', '', '', '', '0', '\0', '', 'default', 'default', '\0', '9');
-INSERT INTO `yb_category` VALUES ('22', '21', '1', 'test7', '', '', '', '0', '\0', '', 'default', 'default', '\0', '10');
-INSERT INTO `yb_category` VALUES ('23', '22', '1', 'test8', '', '', '', '0', '\0', '', 'default', 'default', '\0', '11');
+INSERT INTO `yb_category` VALUES ('1', '0', '1', '未分类', '未分类', '我是关键词', '我是描述', '0', '', '1', 'default', 'default', '', '0');
 
 -- ----------------------------
 -- Table structure for yb_content
@@ -89,15 +70,14 @@ CREATE TABLE `yb_content` (
   PRIMARY KEY (`ID`),
   UNIQUE KEY `Alias` (`Alias`) USING HASH,
   KEY `CategoryID` (`CategoryID`,`Status`,`UpdateTime`,`PostTime`),
-  KEY `Author` (`Author`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+  KEY `Author` (`Author`),
+  KEY `Top` (`Top`,`Index`,`UpdateTime`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of yb_content
 -- ----------------------------
-INSERT INTO `yb_content` VALUES ('4', '1', '1', '1', '23', '&lt;html&gt;标签', '<p>lag后来看<span style=\"color: rgb(255, 0, 0);\"><strong>到施工</strong></span>路段时<br/></p>', '<p>123</p>', 'a,b,c', 'balabala', '0', '0', '', '', 'test', 'default', '0', '2017-02-22 15:16:47', '2017-02-22 15:16:47');
-INSERT INTO `yb_content` VALUES ('6', '1', '1', '1', '4', '大师傅撒反对撒', '', '', '', '', '0', '0', '', '\0', '', 'default', '0', '2017-02-22 16:58:20', '2017-02-22 16:58:20');
-INSERT INTO `yb_content` VALUES ('7', '2', '1', '1', '0', '关于我们', '', '', '', '', '0', '0', '', '\0', 'about', 'default', '0', '2017-02-22 16:59:37', '2017-02-22 16:59:37');
+INSERT INTO `yb_content` VALUES ('1', '1', '1', '1', '1', '欢迎使用YurunBlog！', '<p style=\"text-indent: 2em;\">欢迎使用YurunBlog！</p><p style=\"text-indent: 2em;\"><span style=\"text-indent: 32px;\">YurunBlog是一款基于YurunPHP框架开发的博客系统！</span></p>', '<p style=\"white-space: normal; text-indent: 2em;\">欢迎使用YurunBlog！</p><p style=\"white-space: normal; text-indent: 2em;\">YurunBlog是一款基于YurunPHP框架开发的博客系统！</p>', '我是关键词', '我是描述', '0', '0', '', '\0', '1', 'default', '0', '2017-02-24 16:56:06', '2017-02-24 16:56:06');
 
 -- ----------------------------
 -- Table structure for yb_dict
@@ -144,9 +124,6 @@ CREATE TABLE `yb_exdata` (
 -- ----------------------------
 -- Records of yb_exdata
 -- ----------------------------
-INSERT INTO `yb_exdata` VALUES ('2', '21', 'ccc', '3');
-INSERT INTO `yb_exdata` VALUES ('2', '21', 'content', 'test');
-INSERT INTO `yb_exdata` VALUES ('2', '21', 'tid', '6');
 
 -- ----------------------------
 -- Table structure for yb_user

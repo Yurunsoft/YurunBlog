@@ -24,9 +24,13 @@ abstract class UrlHelper
 	public function Article_list($data)
 	{
 		static $categoryModel;
-		if(isset($data['param']['page']) && 1 == $data['param']['page'])
+		if(isset($data['param']['page']))
 		{
-			unset($data['param']['page']);
+			$page = $data['param']['page'];
+		}
+		else
+		{
+			$page = 1;
 		}
 		if(!isset($data['param']['Alias']) && isset($data['param']['ID']))
 		{
@@ -36,6 +40,11 @@ abstract class UrlHelper
 			}
 			$data['param'] = $categoryModel->getByPk($data['param']['ID']);
 		}
-		$data['result'] = Dispatch::url('Home/Article/list',array('Alias'=>$data['param']['Alias']));
+		$param = array('Alias'=>$data['param']['Alias']);
+		if($page > 1)
+		{
+			$param['page'] = $page;
+		}
+		$data['result'] = Dispatch::url('Home/Article/list',$param);
 	}
 }
