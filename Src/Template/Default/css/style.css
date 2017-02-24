@@ -14,6 +14,15 @@ a:hover,a:active{
 	padding: 15px 0 0 0;
 	min-height: calc(100% - 86px);
 }
+#navbar{
+
+}
+#navbar .layui-nav .layui-nav-item a{
+	padding:15px 20px;
+}
+#navbar .layui-nav .layui-nav-more{
+	top:22px;
+}
 #left-box{
 	width:800px;
 	float:left;
@@ -177,7 +186,7 @@ footer a{
 	.navbar-inverse .navbar-nav>.active>a, .navbar-inverse .navbar-nav>.active>a:focus, .navbar-inverse .navbar-nav>.active>a:hover{
 		background:transparent
 	}
-	.navbar-inverse .navbar-nav>.active>a:after, .navbar-inverse .navbar-nav>li>a:focus::after, .navbar-inverse .navbar-nav>li>a:hover::after{
+	.navbar-inverse .navbar-nav>.active>a:after, .navbar-inverse .navbar-nav>li>a:focus::after{
 		content: '';
 		top: auto;
 		bottom: 0;
@@ -190,6 +199,9 @@ footer a{
 		transition: all .2s;
 		-webkit-transition: all .2s;
 		width: 100%;
+	}
+	#navbar .open > a:after{
+		background-color:#2e885b
 	}
 }
 
