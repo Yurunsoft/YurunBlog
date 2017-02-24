@@ -12,9 +12,9 @@ YurunBlog 基于 YurunPHP 框架开发，目前这还属于Demo阶段，暂时�
 
 * 首先确认你的Apache/Nginx支持pathinfo
 
-* 将 Db/db_yurunblog.sql 导入数据库
+* 将 `Db/db_yurunblog.sql` 导入数据库
 
-* 打开 Src/Config/debug.php 修改数据库配置
+* 打开 `Src/Config/debug.php` 修改数据库配置
 
 ##目录说明
 
@@ -44,4 +44,4 @@ Template	前台模版目录
 
 index.php	入口文件
 
-###后续有待补充……
+###更多说明请阅读`Document\开发说明.txt`

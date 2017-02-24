@@ -28,4 +28,9 @@ Static		静态文件目录，防止css/js/图片等
 Template	前台模版目录
 index.php	入口文件
 
+【其它】
+后台地址：http://xxx.com/Admin
+账号：admin
+密码：admin
+
 后续有待补充……
