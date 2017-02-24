@@ -130,6 +130,7 @@ function databindFormElement(data, formElement) {
                         element.attr('checked', element.val() == data[key]);
                         break;
                     case 'DATETIME-LOCAL':
+                    case 'DATE':
                         element.val(data[key].replace(' ', 'T'));
                         break;
                     case 'RADIO':
