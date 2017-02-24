@@ -18,6 +18,7 @@ class PagebarUrl
 	{
 		$param=$this->url_param;
 		$param[$this->page_field]=$page;
+		Log::add(var_export($this->url_rule,true));
 		return Dispatch::url($this->url_rule,$param);
 	}
 }

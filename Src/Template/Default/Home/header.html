@@ -10,16 +10,21 @@
 			</button>
 			<h1>
 				<a class="navbar-brand" href="__WEBROOT__">
-					YurunBlog
+					<CONFIG:@.SYSTEM_NAME>
 					<!--<img alt="YurunBlog" src="这里支持放Logo图片">-->
 				</a>
 			</h1>
 		</div>
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
-				<li class="active"><a href="__WEBROOT__">首页</a></li>
-				<li><a href="__WEBROOT__">分类分类1</a></li>
-				<li><a href="__WEBROOT__">分类分类2</a></li>
+				<li<if condition="'Index' === __DYNAMIC_CONTROL__ && 'index' === __DYNAMIC_ACTION__"> class="active"</if>><a href="__WEBROOT__">首页</a></li>
+				<foreach list="$categorys">
+					<li<if condition="
+					('Article' === __DYNAMIC_CONTROL__ && 'list' === __DYNAMIC_ACTION__ && $categoryInfo['ID'] === $value['ID'])
+					||
+					('Article' === __DYNAMIC_CONTROL__ && 'view' === __DYNAMIC_ACTION__ && $articleInfo['CategoryID'] === $value['ID'])
+					"> class="active"</if>><a href="<%=$value['Url']%>"><%=$value['Name']%></a></li>
+				</foreach>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				<!--<li><a href="about.html">关于</a></li>-->

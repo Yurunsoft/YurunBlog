@@ -1,6 +1,7 @@
 <?php
 return array(
 	'SYSTEM_NAME'			=> 'YurunBlog',
+	'SUB_TITLE'				=> '基于YurunPHP的开源博客系统',
 	'HASH_DICT'				=> '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
 	'VCODE_CHARSET'			=> 'adefkmprstuvwxyACDEFHKMPRTUVWXY2347',
 	'VCODE_WIDTH'			=> 80,
@@ -11,5 +12,15 @@ return array(
 	'JS_CACHE_TIME'			=> 1,
 	'EDITOR_TYPE'			=> 'ueditor',
 	'THEME' 				=> 'Default',
-	'THEME_ON'				=> true
+	'THEME_ON'				=> true,
+	'TITLES'		=>	array(
+		'Index/index/first'	=>	'{SYSTEM_NAME} - {SUB_TITLE}',
+		'Index/index'		=>	'全部文章 - 第{CurrPage}页 - {SYSTEM_NAME}',
+		'Article/view'		=>	'{Article.Title} - {Article.CategoryName} - {SYSTEM_NAME}',
+		'Article/list/first'=>	'{Category.Title} - {SYSTEM_NAME}',
+		'Article/list'		=>	'{Category.Title} - 第{CurrPage}页 - {SYSTEM_NAME}',
+	),
+	'SHOW_NUMBER'	=>	array(
+		'Home'	=>	10,
+	)
 );

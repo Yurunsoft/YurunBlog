@@ -7,11 +7,14 @@ return array(
     	'hide_default_file'     => true,
     	// 路由规则
     	'rules'                 => array(
+    		'all/[page:int]'					=>	'Home/Index/index',
     		''									=>	'Home/Index/index',
     		'admin'								=>	'Admin/Index/index',
     		'Api/[control]/[action]'			=>	'Public/Api/call',
-			// 'Admin/API/[control]/[action]'		=>	'Admin/API/call',
-			// 'Home/API/[control]/[action]'		=>	'Home/API/call',
+			'a/[Alias:word].html'				=>	'Home/Article/view',
+			'[Alias:word].html'					=>	'Home/Page/view',
+    		'[Alias:word]/[page:int]'			=>	'Home/Article/list',
+    		'[Alias:word]'						=>	'Home/Article/list',
     	)
     )
 );

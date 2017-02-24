@@ -229,3 +229,33 @@ function &getArticleTemplates()
 	);
 	return $result;
 }
+function getTitle($rule,$params = array())
+{
+	return preg_replace_callback(
+					'/{([^}]+)}/',
+					function($matches)use($params){
+						$names = explode('.',$matches[1]);
+						$data = &$params;
+						foreach($names as $item)
+						{
+							if(!isset($data[$item]))
+							{
+								$data = null;
+								break;
+							}
+							else
+							{
+								$data = &$data[$item];
+							}
+						}
+						if(null === $data)
+						{
+							return Config::get('@.' . $matches[1],'');
+						}
+						else
+						{
+							return $data;
+						}
+					},
+					$rule);
+}

@@ -14,6 +14,25 @@ class CategoryModel extends CategoryBaseModel
 		{
 			return $result;
 		}
+		if(isEmpty($data['Alias']))
+		{
+			$data['Alias'] = uniqid('',true);
+			$data['AliasAuto'] = true;
+		}
+		else if(Validator::regex($data['Alias'],'/^\d+$/'))
+		{
+			$this->error = '别名不能为纯数字';
+			return false;
+		}
+		else
+		{
+			$data['AliasAuto'] = false;
+			if($this->aliasExists($data['Alias']))
+			{
+				$this->error = '别名已被使用';
+				return false;
+			}
+		}
 		return parent::__addBefore($data);
 	}
 	public function __addAfter(&$data,$result)
@@ -24,6 +43,10 @@ class CategoryModel extends CategoryBaseModel
 		{
 			return $result;
 		}
+		if($data['AliasAuto'] && !$this->wherePk($result)->edit(array('ID'=>$result,'Alias'=>$result)))
+		{
+			return false;
+		}
 		return parent::__addAfter($data,$result);
 	}
 	public function __editBefore(&$data)
@@ -33,6 +56,26 @@ class CategoryModel extends CategoryBaseModel
 		if(null !== $result && true !== $result)
 		{
 			return $result;
+		}
+		if(isset($data['Alias']))
+		{
+			if('' === $data['Alias'])
+			{
+				$data['Alias'] = $data['ID'];
+			}
+			else
+			{
+				if($data['Alias'] != $data['ID'] && Validator::regex($data['Alias'],'/^\d+$/'))
+				{
+					$this->error = '别名不能为纯数字';
+					return false;
+				}
+				if($this->aliasExists($data['Alias'],$data['ID']))
+				{
+					$this->error = '别名已被使用';
+					return false;
+				}
+			}
 		}
 		return parent::__editBefore($data);
 	}
@@ -93,5 +136,17 @@ class CategoryModel extends CategoryBaseModel
 			return $result;
 		}
 		return parent::__deleteAfter($result);
+	}
+	public function __selectOneAfter(&$data)
+	{
+		$data['Url'] = Dispatch::url('Article/list',$data);
+	}
+	public function onlyGetShow()
+	{
+		return $this->where(array('IsShow'=>true));
+	}
+	public function onlyGetNavShow()
+	{
+		return $this->where(array('IsShow'=>true,'NavigationShow'=>true));
 	}
 }

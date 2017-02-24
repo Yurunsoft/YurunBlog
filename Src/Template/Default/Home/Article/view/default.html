@@ -10,16 +10,14 @@
 		<div id="main" class="container">
 			<div id="left-box" class="content-container">
 				<div class="article-view">
-					<h1><a href="">我是一个标题啦啦啦啦啦啦啦啦</a></h1>
+					<h1><%=$articleInfo['Title']%></h1>
 					<div class="article-info">
-						<span class="time"><i class="glyphicon glyphicon-time"></i>2017-02-23 12:12:12</span>
-						<span class="author"><i class="glyphicon glyphicon-user"></i><a href="javascript:layer.alert('正在玩命开发中……',{icon:6});">宇润</a></span>
-						<span class="category"><i class="glyphicon glyphicon-folder-open"></i><a href="javascript:layer.alert('正在玩命开发中……',{icon:6});">经验分享</a></span>
+						<span class="time"><i class="glyphicon glyphicon-time"></i><%=$articleInfo['UpdateTime']%></span>
+						<span class="author"><i class="glyphicon glyphicon-user"></i><a href="javascript:layer.alert('正在玩命开发中……',{icon:6});"><%=$articleInfo['AuthorName']%></a></span>
+						<span class="category"><i class="glyphicon glyphicon-folder-open"></i><a href="<Url='Article/list',array('ID'=>$articleInfo['CategoryID'])/>"><%=$articleInfo['CategoryName']%></a></span>
 					</div>
 					<div class="article-content">
-						<p>随便写点字111随便写点字111随便写点字111随便写点字111随便写点字111随便写点字111随便写点字111随便写点字111随便写点字111随便写点字111随便写点字111随便写点字111随便写点字111随便写点字111随便写点字111随便写点字111随便写点字111随便写点字111</p>
-						<p style="text-align:center"><img src="http://kabe.im/Static//Upload/2017/01/05/586e3d9df1771281221085.png" title="get_ready-b37b288c.jpg" alt="get_ready-b37b288c.jpg" style="text-align: center; white-space: normal;"></p>
-						<p>随便写点字222</p>
+						<%=$articleInfo['Content']%>
 					</div>
 				</div>
 			</div>

@@ -1,3 +1,6 @@
+html,body{
+	height:100%
+}
 body{
 	padding-top: 51px;
 }
@@ -9,6 +12,7 @@ a:hover,a:active{
 }
 #main{
 	padding: 15px 0 0 0;
+	min-height: calc(100% - 86px);
 }
 #left-box{
 	width:800px;
@@ -36,7 +40,15 @@ a:hover,a:active{
 
 }
 .article-view h1{
-	
+	font-size:2.25rem;
+	line-height:40px;
+	text-align:center;
+}
+.article-view > .article-info{
+	text-align:center;
+}
+.article-view > .article-content{
+	margin-top:10px
 }
 
 .article-info{
@@ -49,6 +61,7 @@ a:hover,a:active{
 	margin-right:4px;
 }
 .article-info > .time{
+	color: #888;
 }
 .article-info > .author{
 }
@@ -72,6 +85,10 @@ a:hover,a:active{
 .article-list-img-text > li > h2{
 	font-size:2rem;
 	line-height:36px;
+	border-left: 5px solid #009688;
+	padding-left:8px;
+	margin-bottom:5px;
+	background-color: #fafafa;
 }
 .article-list-img-text > li > h2 > a{
 	color:#2F4056

@@ -12,7 +12,7 @@ class UserModel extends UserSession
     /**
 	 * 处理查询内容
 	 */
-	public function parseSelect($data)
+	public function __selectBefore()
 	{
         $tableName = $this->tableName();
         $levelTable = $this->tableName('user_level');

@@ -8,17 +8,18 @@ class ContentModel extends BaseModel
 	/*
 	 * 处理查询内容
 	 */
-	public function parseSelect($data)
+	public function __selectBefore()
 	{
 		$tableName = $this->tableName();
-		return $this->field("{$tableName}.*,
-							dictStatus.Text as StatusText,
-							user.Name as AuthorName,
-							category.Name as CategoryName")
-					->join('left',$this->tableName('dict') . ' as dictStatus',"dictStatus.Type = 'CONTENT_STATUS' and dictStatus.Value = {$tableName}.Status")
-					->join('left',$this->tableName('user') . ' as user',"{$tableName}.Author = user.ID")
-					->join('left',$this->tableName('category') . ' as category',"{$tableName}.CategoryID = category.ID")
-					;
+		$this->field("{$tableName}.*,
+					dictStatus.Text as StatusText,
+					user.Name as AuthorName,
+					category.Name as CategoryName
+					")
+			 ->join('left',$this->tableName('dict') . ' as dictStatus',"dictStatus.Type = 'CONTENT_STATUS' and dictStatus.Value = {$tableName}.Status")
+			 ->join('left',$this->tableName('user') . ' as user',"{$tableName}.Author = user.ID")
+			 ->join('left',$this->tableName('category') . ' as category',"{$tableName}.CategoryID = category.ID")
+			 ;
 	}
 	/**
 	 * 处理查询条件

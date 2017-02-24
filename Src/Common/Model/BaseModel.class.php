@@ -22,13 +22,6 @@ class BaseModel extends Model
 	{
 		return $this->pk;
 	}
-	/*
-	 * 处理查询内容
-	 */
-	public function parseSelect($data)
-	{
-		return $this;
-	}
 	/**
 	 * 处理查询条件
 	 */
@@ -76,7 +69,7 @@ class BaseModel extends Model
 	 */
 	public function getInfo($pkData,$data = array())
 	{
-		return $this->parseSelect($data)->getByPk($pkData);
+		return $this->getByPk($pkData);
 	}
 	/**
 	 * 查询多条记录，支持分页
@@ -87,8 +80,7 @@ class BaseModel extends Model
 	 */
 	public function selectList($data = array(),$page = null,$show = null,&$totalPages = null)
 	{
-		$this->parseSelect($data)
-			 ->parseCondition($data);
+		$this->parseCondition($data);
 		if(!empty($data['field_after']))
 		{
 			$this->field($data['field_after']);

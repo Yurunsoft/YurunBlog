@@ -284,11 +284,11 @@ SQL
 	public function getInfo($aliasOrID,$data = array())
 	{
 		// 先根据Alias获取
-		$data = $this->parseSelect($data)->where(array($this->tableName() . '.' . $this->aliasFieldName => $aliasOrID))->select(true);
+		$data = $this->where(array($this->tableName() . '.' . $this->aliasFieldName => $aliasOrID))->select(true);
 		if(!isset($data[$this->pk]))
 		{
 			// Alias不存在再根据ID获取
-			$data = $this->parseSelect($data)->where(array($this->tableName() . '.' . $this->pk => $aliasOrID))->select(true);
+			$data = $this->where(array($this->tableName() . '.' . $this->pk => $aliasOrID))->select(true);
 		}
 		return $data;
 	}
@@ -310,11 +310,8 @@ SQL
 		}
 		return $result;
 	}
-	/*
-	 * 处理查询内容
-	 */
-	public function parseSelect($data)
+	public function __selectBefore()
 	{
-		return $this->order(array('Index','ID'));
+		$this->order(array('Index','ID'));
 	}
 }

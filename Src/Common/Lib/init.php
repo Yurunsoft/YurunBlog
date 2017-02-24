@@ -34,3 +34,10 @@ Event::register('YURUN_APP_LOAD_COMPLETE',function(){
 Event::register('YP_URL_CREATE', function(&$data){
 	UrlHelper::parse($data);
 });
+/**
+ * 前台页面加载事件
+ */
+Event::register('YB_HOME_ONLOAD',function($data){
+	$categoryModel = new CategoryModel();
+	$data['control']->view->categorys = $categoryModel->onlyGetShow()->getAssocList();
+});
