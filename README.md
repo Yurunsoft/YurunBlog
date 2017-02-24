@@ -8,6 +8,8 @@ YurunBlog 基于 YurunPHP 框架开发，目前这还属于Demo阶段，暂时�
 
 这个开源项目我会持续开发更新，也欢迎有兴趣的朋友一起来完善 YurunBlog 。
 
+演示地址（宇润的博客）：http://blog.yurunsoft.com/
+
 ##配置说明
 
 * 首先确认你的Apache/Nginx支持pathinfo
