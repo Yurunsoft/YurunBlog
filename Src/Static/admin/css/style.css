@@ -699,6 +699,9 @@ body#popup{
 	.table-toolbar .form-group{
 		max-width: none;
 	}
+	.table {
+		table-layout:auto !important; 
+	}
 }
 a.layui-btn:hover{
 	text-decoration: none;

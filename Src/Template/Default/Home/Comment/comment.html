@@ -1,0 +1,38 @@
+<div class="comment-box" id="comment">
+	<div class="layui-tab layui-tab-brief">
+		<ul class="layui-tab-title">
+			<li class="layui-this"><b>发表评论</b></li>
+		</ul>
+		<form id="CommentForm" class="CommentForm form-inline">
+			<textarea name="Content" class="layui-textarea" rows="6" placeholder="写下你的评论吧！"></textarea>
+			<div class="bottom-box">
+				<div class="form-group userinfo">
+					当前用户：<img src="__STATIC__/images/default-userpic.png" class="userpic"/> <span class="username"></span>
+				</div>
+				<span class="comment-submit-info">
+					<div class="form-group">
+						<input type="text" name="Name" placeholder="昵称(必填)" class="layui-input"/>
+					</div>
+					<div class="form-group">
+						<input type="text" name="Email" placeholder="邮箱地址" class="layui-input"/>
+					</div>
+					<div class="form-group">
+						<input type="text" name="QQ" placeholder="QQ号" class="layui-input"/>
+					</div>
+				</span>
+				<input type="hidden" name="ContentID" value="<%=$content_id%>"/>
+				<input type="hidden" name="hash" value="<%=getCommentHash($content_id)%>"/>
+				<input type="hidden" name="CommentID" value="0"/>
+				<button type="submit" class="form-control layui-btn"><i class="layui-icon">&#xe609;</i> 提交</button>
+			</div>
+			<a class="btn-close-comment-box layui-icon">&#x1006;</a>
+		</form>
+		<ul class="layui-tab-title">
+			<li class="layui-this"><b>评论列表</b></li>
+		</ul>
+		<ul id="CommentList" class="comment-list">
+			<CommentList runat="server" content_id="#$content_id"/>
+		</ul>
+		<div id="CommentPagebar"></div>
+	</div>
+</div>

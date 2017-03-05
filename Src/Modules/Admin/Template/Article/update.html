@@ -83,6 +83,9 @@
 		<div class="layui-form-item">
 			<label class="layui-form-label">其它</label>
 			<div class="layui-input-block">
+				<if condition="isset($_GET['id'])">
+				<input type="checkbox" name="LockUpdateTime" value="1" un-checked-value="0" title="锁定更新时间"/>
+				</if>
 				<input type="checkbox" name="CanComment" value="1" un-checked-value="0" title="允许评论" checked/>
       			<input type="checkbox" name="Top" value="1" un-checked-value="0" title="置顶"/>
 			</div>
@@ -96,11 +99,23 @@
 	</div>
 </form>
 <script>
+	var isExec = false;
 	<if condition="isset($_GET['id'])">
 	var onEditorReady = function(){
-		onEditorReady = null;
-		var fo = new FindOption({url:'<Api runat="server" control="#__DYNAMIC_CONTROL__" action="find"/>',params:{ID:<%=Request::get('id')%>},formElement:$('#form1'),onSuccess:function(data){
+		if(isExec)
+		{
+			return;
+		}
+		isExec = true;
+		var fo = new FindOption({url:'<Api runat="server" control="#__DYNAMIC_CONTROL__" action="find"/>',params:{ID:<%=Request::get('id')%>},formElement:$('#form1')
+		,onSuccess:function(data){
 			$('input[name=UpdateTime]').val('');
+			var tags = [];
+			for(var i = 0; i < data.data.Tags.length; ++i)
+			{
+				tags.push(data.data.Tags[i].Name);
+			}
+			$('input[name=Tags]').val(tags.join(','));
 			setEditorContent(editor_Content,data.data.Content);
 			setEditorContent(editor_Summary,data.data.Summary);
 		}});

@@ -3,9 +3,27 @@ class TagModel extends BaseModel
 {
 	public function __saveBefore(&$data)
 	{
-		if(isEmpty($data['Code']))
+		$isAdd = !isset($data['ID']);
+		if($isAdd)
 		{
-			$data['Code'] = 'tag_' . uniqid();
+			if(!isset($data['Type']))
+			{
+				$this->error = '请选择标签类型';
+				return false;
+			}
+			if(isEmpty($data['Code']))
+			{
+				$data['Code'] = $data['Name'];
+			}
+		}
+		if(isset($data['Code']))
+		{
+			$data['Code'] = parseTagCode($data['Code']);
+			if($this->codeExists($data['Code'],$data['Type'],$isAdd ? 0 : $data['ID']))
+			{
+				$this->error = '标签代码已存在';
+				return false;
+			}
 		}
 		return parent::__saveBefore($data);
 	}
@@ -28,7 +46,7 @@ class TagModel extends BaseModel
 		$this->field($this->tableName() . '.*,dict.text as TypeName')
 			 ->join('left',$this->tableName('dict') . ' as dict','dict.type=\'' . TAG_TYPE . '\' and dict.value = ' . $this->tableName() . '.Type');
 	}
-	public static function getManageInstance($code)
+	public static function getManageInstance($type,$code)
 	{
 		static $tagModel;
 		if(null === $tagModel)
@@ -36,9 +54,23 @@ class TagModel extends BaseModel
 			$tagModel = new TagModel;
 		}
 		$tag = $tagModel->getByCode($code);
-		$typeCode = BaseDict::getName(TAG_TYPE, (int)$tag['Type']);
-		$type = strtolower(substr($typeCode,9));
-		$class = TagManage . ucfirst($type) . 'Model';
+		$class = 'TagManage' . $type . 'Model';
 		return new $class($tag['ID']);
+	}
+	/**
+	 * 标签代码是否存在
+	 * @param string $code
+	 * @param int $type
+	 * @param int $currID
+	 * @return bool
+	 */
+	public function codeExists($code,$type,$currID = 0)
+	{
+		$where = array('Type'=>$type,'Code'=>$code);
+		if(0 !== $currID)
+		{
+			$where['ID'] = array('<>',$currID);
+		}
+		return $this->where($where)->count() > 0;
 	}
 }

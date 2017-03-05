@@ -12,9 +12,25 @@ define('CONTENT_TYPE','CONTENT_TYPE');
  */
 define('EX_DATA_TYPE','EX_DATA_TYPE');
 /**
+ * 评论状态
+ */
+define('COMMENT_STATUS','COMMENT_STATUS');
+/**
  * 内容状态
  */
 define('CONTENT_STATUS','CONTENT_STATUS');
+/**
+ * 正常
+ */
+define('COMMENT_STATUS_NORMAL',1);
+/**
+ * 等待审核
+ */
+define('COMMENT_STATUS_WAIT_VERIFY',2);
+/**
+ * 审核不通过
+ */
+define('COMMENT_STATUS_VERIFY_NOT_PASS',3);
 /**
  * 正常
  */
@@ -55,7 +71,33 @@ define('EX_DATA_TYPE_CATEGORY',2);
  * 页面
  */
 define('EX_DATA_TYPE_PAGE',3);
+/**
+ * 评论
+ */
+define('EX_DATA_TYPE_COMMENT',4);
+/**
+ * 内容标签
+ */
+define('TAG_TYPE_CONTENT',1);
 return array (
+  'COMMENT_STATUS' => 
+  array (
+    'COMMENT_STATUS_NORMAL' => 
+    array (
+      'value' => '1',
+      'text' => '正常',
+    ),
+    'COMMENT_STATUS_WAIT_VERIFY' => 
+    array (
+      'value' => '2',
+      'text' => '等待审核',
+    ),
+    'COMMENT_STATUS_VERIFY_NOT_PASS' => 
+    array (
+      'value' => '3',
+      'text' => '审核不通过',
+    ),
+  ),
   'CONTENT_STATUS' => 
   array (
     'CONTENT_STATUS_NORMAL' => 
@@ -113,6 +155,19 @@ return array (
     array (
       'value' => '3',
       'text' => '页面',
+    ),
+    'EX_DATA_TYPE_COMMENT' => 
+    array (
+      'value' => '4',
+      'text' => '评论',
+    ),
+  ),
+  'TAG_TYPE' => 
+  array (
+    'TAG_TYPE_CONTENT' => 
+    array (
+      'value' => '1',
+      'text' => '内容标签',
     ),
   ),
 );

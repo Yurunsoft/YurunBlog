@@ -3,7 +3,7 @@
 		<div class="layui-form-item">
 			<label class="layui-form-label">标题 <span class="red">*</span></label>
 			<div class="layui-input-block">
-				<input type="text" name="Title" placeholder="文章标题" class="layui-input" filter="htmlspecialchars_decode"/>
+				<input type="text" name="Title" placeholder="页面标题" class="layui-input" filter="htmlspecialchars_decode"/>
 			</div>
 		</div>
 		<div class="layui-form-item" style="margin-bottom:0">
@@ -23,7 +23,7 @@
 		<div class="layui-form-item">
 			<label class="layui-form-label">别名</label>
 			<div class="layui-input-block">
-				<input type="text" name="Alias" placeholder="文章别名" class="layui-input"/>
+				<input type="text" name="Alias" placeholder="页面别名" class="layui-input"/>
 			</div>
 		</div>
 		<div class="layui-form-item">
@@ -33,9 +33,9 @@
 			</div>
 		</div>
 		<div class="layui-form-item">
-			<label class="layui-form-label">文章模版</label>
+			<label class="layui-form-label">页面模版</label>
 			<div class="layui-input-block">
-				<select runat="server" name="Template" data_func="getArticleTemplates" text_field="value"/>
+				<select runat="server" name="Template" data_func="getPageTemplates" text_field="value"/>
 			</div>
 		</div>
 		<div class="layui-form-item">
@@ -77,6 +77,9 @@
 		<div class="layui-form-item">
 			<label class="layui-form-label">其它</label>
 			<div class="layui-input-block">
+				<if condition="isset($_GET['id'])">
+				<input type="checkbox" name="LockUpdateTime" value="1" un-checked-value="0" title="锁定更新时间"/>
+				</if>
 				<input type="checkbox" name="CanComment" value="1" un-checked-value="0" title="允许评论" checked/>
       			<input type="checkbox" name="Top" value="1" un-checked-value="0" title="置顶"/>
 			</div>
@@ -90,9 +93,26 @@
 	</div>
 </form>
 <script>
+	var isExec = false;
 	<if condition="isset($_GET['id'])">
-	$(function(){
-		var fo = new FindOption({url:'<Api runat="server" control="#__DYNAMIC_CONTROL__" action="find"/>',params:{ID:<%=Request::get('id')%>},formElement:$('#form1')});
-	});
+	var onEditorReady = function(){
+		if(isExec)
+		{
+			return;
+		}
+		isExec = true;
+		var fo = new FindOption({url:'<Api runat="server" control="#__DYNAMIC_CONTROL__" action="find"/>',params:{ID:<%=Request::get('id')%>},formElement:$('#form1')
+		,onSuccess:function(data){
+			$('input[name=UpdateTime]').val('');
+			var tags = [];
+			for(var i = 0; i < data.data.Tags.length; ++i)
+			{
+				tags.push(data.data.Tags[i].Name);
+			}
+			$('input[name=Tags]').val(tags.join(','));
+			setEditorContent(editor_Content,data.data.Content);
+			setEditorContent(editor_Summary,data.data.Summary);
+		}});
+	}
 	</if>
 </script>

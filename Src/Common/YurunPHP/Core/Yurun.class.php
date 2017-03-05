@@ -85,11 +85,6 @@ class Yurun
 		}
 		// 静态文件目录
 		define('STATIC_PATH',$staticPath);
-		// 自动启动session
-		if(Config::get('@.SESSION_AUTO_OPEN'))
-		{
-			Session::start();
-		}
 		// 初始化路由规则
 		Dispatch::initRouteRules();
 		Dispatch::resolve();
@@ -148,6 +143,9 @@ class Yurun
 							$canInclude = true;
 						}
 						break;
+					case 'Path':
+						$canInclude = true;
+						break;
 					default:
 						$canInclude = false;
 						break;
@@ -158,6 +156,7 @@ class Yurun
 					if(self::$routeResolveComplete)
 					{
 						$files = array (
+							$filePath,
 							$currModulePath . $filePath,	// 模块目录
 							APP_PATH . $filePath,			// 项目目录
 							ROOT_PATH . $filePath			// 框架目录
@@ -166,6 +165,7 @@ class Yurun
 					else
 					{
 						$files = array (
+							$filePath,
 							APP_PATH . $filePath,			// 项目目录
 							ROOT_PATH . $filePath			// 框架目录
 						);
@@ -261,6 +261,11 @@ class Yurun
 			ob_end_clean();
 			self::printError($e);
 		}
+		else
+		{
+			Event::trigger('YURUN_SHUTDOWN');
+		}
+		Session::save();
 		if(class_exists('Log',false))
 		{
 			Log::save();

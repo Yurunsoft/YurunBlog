@@ -1,0 +1,19 @@
+<foreach list="$comments" value="commentItem">
+<li name="comment-<%=$commentItem['ID']%>" id="comment-<%=$commentItem['ID']%>">
+	<div class="comment-item-header">
+		<span class="user-pic"><img class="userpic" src="__STATIC__/images/default-userpic.png"/></span>
+		<span class="name"><%=$commentItem['Name']%></span>
+		<span class="time"><%=$commentItem['Time']%></span>
+	</div>
+	<p class="comment-content"><%=parseHtmlLine($commentItem['Content'])%></p>
+	<div class="comment-item-footer">
+		<a href="javascript:;" class="btn-reply-comment pull-right" comment-id="<%=$commentItem['ID']%>">回复</a>
+	</div>
+	<div class="reply-box" comment-id="<%=$commentItem['ID']%>"></div>
+	<if condition="isset($commentItem['Children'][0])">
+		<ul class="comment-list-sub">
+			<php>$this->control->renderSubItem($commentItem['Children']);</php>
+		</ul>
+	</if>
+</li>
+</foreach>

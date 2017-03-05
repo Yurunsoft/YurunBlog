@@ -43,4 +43,18 @@ class MemberAPI extends BaseAPI
 		}
 		$this->data['post_data'] = $data;
 	}
+	/**
+	 * @API
+	 * @UserToken
+	 * 获取登录用户信息
+	 */
+	public function userinfo()
+	{
+		$data = array(
+			'ID'	=>	Globals::$user['ID'],
+			'Name'	=>	Globals::$user['Name'],
+		);
+		$this->data['data'] = $data;
+		$this->success = true;
+	}
 }

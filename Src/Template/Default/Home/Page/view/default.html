@@ -1,0 +1,43 @@
+<?php defined('YB_VERSION') or exit;?>
+<!DOCTYPE html>
+<html>
+	<head>
+		<include name="@app/public_header"/>
+		<include name="/public_static"/>
+	</head>
+	<body>
+		<include name="/header"/>
+		<div id="main" class="container">
+			<div id="left-box" class="content-container">
+				<div class="article-view">
+					<h1><%=$pageInfo['Title']%></h1>
+					<div class="article-info article-info-center">
+						<span class="time"><i class="glyphicon glyphicon-time"></i><%=$pageInfo['UpdateTime']%></span>
+						<span class="author"><i class="glyphicon glyphicon-user"></i><a href="javascript:layer.alert('正在玩命开发中……',{icon:6});"><%=$pageInfo['AuthorName']%></a></span>
+						<span class="category"><i class="glyphicon glyphicon-folder-open"></i><a href="<Url='Article/list',array('ID'=>$pageInfo['CategoryID'])/>"><%=$pageInfo['CategoryName']%></a></span>
+						<span class="view"><i class="glyphicon glyphicon-eye-open"></i><%=$pageInfo['View']%></span>
+						<span class="comment"><a href="#comment"><i class="glyphicon glyphicon-comment"></i><%=$pageInfo['Comments']%></a></span>
+					</div>
+					<div class="article-content">
+						<%=$pageInfo['Content']%>
+					</div>
+				</div>
+				<div class="layui-tab layui-tab-brief">
+					<ul class="layui-tab-title">
+						<li class="layui-this"><b>标签</b></li>
+					</ul>
+					<div class="article-tags">
+						<span class="layui-breadcrumb">
+							<foreach list="$pageInfo['Tags']">
+								<a href="<url='Tag/view',$value/>" target="_blank"><%=$value['Name']%></a>
+							</foreach>
+						</span>
+					</div>
+				</div>
+				<Comment runat="server" content_id="#$pageInfo['ID']"/>
+			</div>
+			<include name="/right"/>
+		</div>
+		<include name="/footer"/>
+	</body>
+</html>

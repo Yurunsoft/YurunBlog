@@ -12,6 +12,7 @@ class ArticleAPI extends BaseAPI
 	 */
 	public function query()
 	{
+		$this->model->orderByNew();
 		$this->__query(array(
 			'dataGroupName'	=>	Config::get('@.QUERY_DATA_GROUP_NAME')
 		));

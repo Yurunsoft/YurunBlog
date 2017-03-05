@@ -1,0 +1,87 @@
+<div class="table-toolbar">
+	<form class="layui-form form-inline" id="form1">
+		<div class="pull-right">
+			<div class="form-group">
+				<div class="input-group">
+					<div class="input-group-addon">状态</div>
+					<select runat="server" data_func="BaseDict::get" data_func_args="#array(COMMENT_STATUS)" name="query.Status" first_item_text="不限" first_item_value="0"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<input type="text" name="query.SearchContentPk" class="layui-input" placeholder="内容ID/Alias"/>
+			</div>
+			<div class="form-group">
+				<input type="text" name="query.SearchCommentContent" class="layui-input" placeholder="评论内容"/>
+			</div>
+			<div class="form-group">
+				<button class="layui-btn"><i class="layui-icon">&#xe615;</i> 搜索</button>
+			</div>
+		</div>
+	</form>
+</div>
+<div class="table-parent table-responsive cb">
+	<table class="table" id="table">
+		<thead>
+			<tr>
+				<th width="60">ID</th>
+				<th width="100">昵称</th>
+				<th width="300">留言内容</th>
+				<th width="140">联系方式</th>
+				<th width="120" title="真实IP：如果启用CDN则是用户IP，可能被伪造
+客户端IP：如果启用CDN则是节点IP">IP地址</th>
+				<th width="150">时间</th>
+				<th width="100" class="center">操作</th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
+</div>
+<div id="pagebar"></div>
+<script id="template" type="text/html">
+{{# layui.each(d.list, function(index, item){ }}
+	<tr>
+		<td>{{ item.ID }}</td>
+		<td>{{ item.Name }}</td>
+		<td>
+			<span style="color:{{ getCommentStatusColor(item.Status) }}">[{{ item.StatusText }}]</span>
+			{{ item.Content }}
+		</td>
+		<td>
+			邮箱：{{ item.Email }}
+			<br/>
+			QQ：{{ item.QQ }}
+		</td>
+		<td class="nowrap">
+			真实IP：{{ item.IP }}
+			<br/>
+			客户端IP：{{ item.UserIP }}
+		</td>
+		<td class="nowrap">{{ item.Time }}</td>
+		<td class="center">
+			<button data-id="{{ item.ID }}" class="btn btn-sm btn-sm-edit glyphicon glyphicon-edit" title="审核"></button>
+			<button data-id="{{ item.ID }}" class="btn btn-sm btn-sm-delete glyphicon glyphicon-remove" title="删除"></button>
+		</td>
+	</tr>
+{{#  }); }}
+</script>
+<script>
+	var queryOption = new QueryOption({
+		template:$('#template').html(),
+		contentElement:$('#table tbody'),
+		queryUrl:'<Api runat="server" control="#__DYNAMIC_CONTROL__" action="query"/>',
+		isBindForm:true,
+		bindFormElement:$('#form1'),
+		pagebarElement:$('#pagebar'),
+	});
+	$('body').on('click','.btn-sm-edit',function(){
+		var action = new PopupOption({url:'<url='update'/>',params:{id:$(this).attr('data-id')},title:'审核',size:['500px','250px'],onSuccess:function(data){
+			queryOption.query();
+		}});
+	})
+	$('body').on('click','.btn-sm-delete',function(){
+		var action = new ActionOption({url:'<Api runat="server" control="#__DYNAMIC_CONTROL__" action="delete"/>',params:{ID:$(this).attr('data-id')},onSuccess:function(data){
+			queryOption.query();
+		}});
+	})
+</script>

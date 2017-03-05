@@ -174,6 +174,7 @@ class Uploader
     {
         $imgUrl = htmlspecialchars($this->fileField);
         $imgUrl = str_replace('&amp;', '&', $imgUrl);
+        $url = parse_url($imgUrl);
 
         //http开头验证
         if (strpos($imgUrl, 'http') !== 0) {
@@ -208,7 +209,7 @@ class Uploader
             return;
         }
         //格式验证(扩展名验证和Content-Type验证)
-        $fileType = strtolower(strrchr($imgUrl, '.'));
+        $fileType = '.' . pathinfo($url['path'],PATHINFO_EXTENSION);
         if (!in_array($fileType, $this->config['allowFiles']) || !isset($heads['Content-Type']) || !stristr($heads['Content-Type'], 'image')) {
             $this->stateInfo = $this->getStateInfo('ERROR_HTTP_CONTENTTYPE');
             return;
@@ -224,9 +225,9 @@ class Uploader
         readfile($imgUrl, false, $context);
         $img = ob_get_contents();
         ob_end_clean();
-        preg_match("/[\/]([^\/]*)[\.]?[^\.\/]*$/", $imgUrl, $m);
+        // preg_match("/[\/]([^\/]*)[\.]?[^\.\/]*$/", $imgUrl, $m);
 
-        $this->oriName = $m ? $m[1]:'';
+        $this->oriName = basename($url['path']);
         $this->fileSize = strlen($img);
         $this->fileType = $this->getFileExt();
         $this->fullName = $this->getFullName();

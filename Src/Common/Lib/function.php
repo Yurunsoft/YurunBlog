@@ -230,6 +230,21 @@ function &getArticleTemplates()
 	return $result;
 }
 /**
+ * 页面模版
+ */
+function &getPageTemplates()
+{
+	$result = array();
+	enumFiles(APP_TEMPLATE . Config::get('@.THEME') . '/Home/Page/view'
+		,function($file) use(&$result){
+			$arr = explode('.',basename($file));
+			array_pop($arr);
+			$result[] = implode('.',$arr);
+		}
+	);
+	return $result;
+}
+/**
  * 获取YurunBlog自定义规则的文本结果
  * @param string $rule 
  * @param array $params 
@@ -264,4 +279,63 @@ function getRuleResult($rule,$params = array())
 						}
 					},
 					$rule);
+}
+/**
+ * 获取评论哈希值
+ * @param id $contentID 
+ * @return string 
+ */
+function getCommentHash($contentID)
+{
+	$key = Session::get('@.COMMENT_KEY');
+	if(false === $key)
+	{
+		$key = uniqid('',true);
+		Session::set('@.COMMENT_KEY',$key);
+	}
+	return sha1(md5($contentID) . $key . md5(Config::get('@.BLOG_KEY',mt_rand())));
+}
+// 兼容PHP < 5.5
+if(!function_exists('array_column'))
+{
+    function array_column($array,$column_name)
+    {
+        return array_map(function($element) use($column_name){return $element[$column_name];}, $array);
+    }
+}
+/**
+ * 处理html换行，把\r\n替换为<br/>
+ * @param mixed $str 
+ * @return mixed 
+ */
+function parseHtmlLine($str)
+{
+	return str_replace("\r\n",'<br/>',$str);
+}
+/**
+ * 处理标签的Code，替换关键符号
+ * @param string $code 
+ * @return string 
+ */
+function parseTagCode($code)
+{
+	return str_replace(
+		array(
+			'=',
+			'%',
+			'&',
+			'?',
+			'/',
+			'#'
+		),
+		array(
+			'Equal',
+			'Percent',
+			'And',
+			'QuestionMark',
+			'Slash',
+			'Sharp'
+		),
+		$code
+	);
 }

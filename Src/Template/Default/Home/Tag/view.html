@@ -1,0 +1,40 @@
+<?php defined('YB_VERSION') or exit;?>
+<!DOCTYPE html>
+<html>
+	<head>
+		<include name="@app/public_header"/>
+		<include name="/public_static"/>
+	</head>
+	<body>
+		<include name="/header"/>
+		<div id="main" class="container">
+			<div id="left-box" class="content-container">
+				<div class="layui-tab layui-tab-brief">
+					<ul class="layui-tab-title">
+						<li class="layui-this"><h1 class="bread"><%=$tagInfo['Name']%></h1></li>
+					</ul>
+				</div>
+				<ul class="article-list-img-text">
+					<foreach list="$articleList">
+					<li>
+						<h2 class="title"><a href="<%=$value['Url']%>" target="_blank"><%=$value['Title']%></a></h2>
+						<div class="article-info">
+							<span class="time"><i class="glyphicon glyphicon-time"></i><%=$value['UpdateTime']%></span>
+							<span class="author"><i class="glyphicon glyphicon-user"></i><a href="javascript:layer.alert('正在玩命开发中……',{icon:6});"><%=$value['AuthorName']%></a></span>
+							<span class="category"><i class="glyphicon glyphicon-folder-open"></i><a href="<Url='Article/list',array('ID'=>$value['CategoryID'])/>"><%=$value['CategoryName']%></a></span>
+							<span class="view"><i class="glyphicon glyphicon-eye-open"></i><%=$value['View']%></span>
+							<span class="comment"><a href="<%=$value['Url']%>#comment" target="_blank"><i class="glyphicon glyphicon-comment"></i><%=$value['Comments']%></a></span>
+						</div>
+						<div class="article-content">
+							<%=$value['Summary']%>
+						</div>
+					</li>
+					</foreach>
+				</ul>
+				<pagebar runat="server" only_first_page_show="#false" curr_page="#$currPage" total_pages="#$totalPages" url_rule="Tag/view" url_param="#$tagInfo"/>
+			</div>
+			<include name="/right"/>
+		</div>
+		<include name="/footer"/>
+	</body>
+</html>

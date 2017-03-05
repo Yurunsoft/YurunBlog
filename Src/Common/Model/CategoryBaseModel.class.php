@@ -19,16 +19,19 @@ abstract class CategoryBaseModel extends BaseModel
 				return false;
 			}
 		}
-		if(0 == $data[$this->parentFieldName])
+		if(isset($data[$this->parentFieldName]))
 		{
-			$data[$this->levelFieldName] = 0;
+			if(0 == $data[$this->parentFieldName])
+			{
+				$data[$this->levelFieldName] = 0;
+			}
+			else
+			{
+				$info = $this->getByPk($data[$this->parentFieldName]);
+				$data[$this->levelFieldName] = $info[$this->levelFieldName] + 1;
+			}
 		}
-		else
-		{
-			$info = $this->getByPk($data[$this->parentFieldName]);
-			$data[$this->levelFieldName] = $info[$this->levelFieldName] + 1;
-		}
-		if(isset($data[$this->pk]))
+		if(isset($data[$this->pk]) && isset($data[$this->parentFieldName]))
 		{
 			$info = $this->getByPk($data[$this->pk]);
 			$this->oldCategoryID = $info[$this->parentFieldName];
@@ -42,14 +45,18 @@ abstract class CategoryBaseModel extends BaseModel
 	}
 	public function __editAfter(&$data,$result)
 	{
-		$this->updateChildren($data[$this->pk]);
+		if(isset($data[$this->pk]))
+		{
+			$this->updateChildren($data[$this->pk]);
+		}
 		return parent::__editAfter($data,$result);
 	}
 	public function __saveAfter(&$data,$result)
 	{
-		if(null !== $this->oldCategoryID && isset($data[$this->parentFieldName]))
+		if(null !== $this->oldCategoryID)
 		{
 			$this->updateParent($data[$this->parentFieldName]);
+			$this->oldCategoryID = null;
 		}
 		return parent::__saveAfter($data,$result);
 	}
@@ -89,33 +96,28 @@ abstract class CategoryBaseModel extends BaseModel
 	 * 获取下属所有级的子分类的ID
 	 * @param number $id
 	 * @param string $first
-	 * @return multitype:
+	 * @return array
 	 */
 	public function getChildsIds($id=0,$first=true)
 	{
 		if(is_array($id))
 		{
-			$ids = array();
-			// 多个分类
-			foreach($id as $value)
+			$ids = $id;
+			if(!isset($ids[0]))
 			{
-				$ids = array_merge($ids,$this->getChildsIds($value,false));
+				return array();
 			}
 		}
 		else
 		{
 			$ids = array($id);
-			$children = $this->field($this->pk)->where(array($this->parentFieldName=>$id))->select();
-			foreach($children as &$value)
-			{
-				if($id === $value[$this->pk])
-				{
-					continue;
-				}
-				$ids = array_merge($ids,$this->getChildsIds($value[$this->pk],false));
-			}
 		}
-		return $first?array_unique($ids):$ids;
+		$tids = array_column($this->selectBefore(false)->field($this->pk)->where(array($this->parentFieldName=>array('in',$ids)))->select(),$this->pk);
+		if(isset($tids[0]))
+		{
+			$ids = array_merge($ids,$tids,$this->getChildsIds($tids,false));
+		}
+		return $first ? array_unique($ids) : $ids;
 	}
 	/**
 	 * 获取一级子分类的ID们
@@ -123,13 +125,8 @@ abstract class CategoryBaseModel extends BaseModel
 	 */
 	public function getChildId($parent = 0)
 	{
-		$ids = array();
-		$children = $this->field($this->pk)->where(array($this->parentFieldName=>$parent))->select();
-		foreach($children as &$value)
-		{
-			$ids[] = $value[$this->pk];
-		}
-		return $ids;
+		$children = $this->selectBefore(false)->field($this->pk)->where(array($this->parentFieldName=>$parent))->select();
+		return array_column($children,$this->pk);
 	}
 	/**
 	 * 检测别名是否存在。存在返回true，不存在或别名为空返回false
@@ -148,7 +145,7 @@ abstract class CategoryBaseModel extends BaseModel
 	 * 获取父级所有级的ID
 	 * @param number $id
 	 * @param string $first
-	 * @return multitype:
+	 * @return array
 	 */
 	public function getParentIds($id = 0,$first = true)
 	{
@@ -249,12 +246,12 @@ SQL
 	 */
 	public function updateChildren($id)
 	{
-		$data = $this->getInfo($id);
-		$level = $data[$this->levelFieldName] + 1;
 		$ids = $this->getChildId($id);
 		if(!empty($ids))
 		{
-			$this->where(array($this->pk=>array('in',$ids)))->edit(array($this->levelFieldName=>$level));
+			$data = $this->getByPk($id);
+			$level = $data[$this->levelFieldName] + 1;
+			$this->where(array($this->pk=>array('in',$ids)))->edit(array(($this->levelFieldName)=>$level));
 			foreach($ids as $id)
 			{
 				$this->updateChildren($id);
@@ -282,22 +279,6 @@ SQL
 		return $result;
 	}
 	
-	/**
-	 * 获取一条记录
-	 * @param type $aliasOrID
-	 * @return type
-	 */
-	public function getInfo($aliasOrID,$data = array())
-	{
-		// 先根据Alias获取
-		$data = $this->where(array($this->tableName() . '.' . $this->aliasFieldName => $aliasOrID))->select(true);
-		if(!isset($data[$this->pk]))
-		{
-			// Alias不存在再根据ID获取
-			$data = $this->where(array($this->tableName() . '.' . $this->pk => $aliasOrID))->select(true);
-		}
-		return $data;
-	}
 	public function selectToSelect($parentID = 0,$currID = -1,$list = null,&$result = null)
 	{
 		if(null === $list)

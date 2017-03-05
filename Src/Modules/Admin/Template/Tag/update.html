@@ -1,0 +1,36 @@
+<form id="form1" class="layui-form layui-form-pane" action="<Api runat="server" control="__CONTROL__" action="#__DYNAMIC_ACTION__"/>" method="post">
+	<div class="col-md-12">
+		<div class="layui-form-item">
+			<label class="layui-form-label">名称</label>
+			<div class="layui-input-inline">
+				<input type="text" name="Name" placeholder="标签名称" autocomplete="off" class="layui-input"/>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">代码</label>
+			<div class="layui-input-inline">
+				<input type="text" name="Code" placeholder="代码，留空可以自动生成" autocomplete="off" class="layui-input"/>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">类型</label>
+			<div class="layui-input-inline">
+				<select runat="server" name="Type" data_func="BaseDict::get" data_func_args="#array('TAG_TYPE')"/>
+			</div>
+			<div class="layui-form-mid layui-word-aux"></div>
+		</div>
+		<div class="center">
+			<if condition="isset($_GET['id'])">
+				<input type="hidden" name="ID"/>
+			</if>
+			<button class="layui-btn" lay-submit>保存</button>
+		</div>
+	</div>
+</form>
+<script>
+	<if condition="isset($_GET['id'])">
+	$(function(){
+		var fo = new FindOption({url:'<Api runat="server" control="Tag" action="find"/>',params:{ID:<%=Request::get('id')%>},formElement:$('#form1')});
+	});
+	</if>
+</script>

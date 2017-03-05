@@ -1,0 +1,23 @@
+<form id="form1" class="layui-form layui-form-pane" action="<Api runat="server" control="#__DYNAMIC_CONTROL__" action="#__DYNAMIC_ACTION__"/>" method="post">
+	<div class="col-md-12">
+		<div class="layui-form-item">
+			<label class="layui-form-label">状态</label>
+			<div class="layui-input-block">
+				<select runat="server" data_func="BaseDict::get" data_func_args="#array(COMMENT_STATUS)" name="Status"/>
+			</div>
+		</div>
+		<div class="center">
+			<if condition="isset($_GET['id'])">
+				<input type="hidden" name="ID"/>
+			</if>
+			<button class="layui-btn" lay-submit style="width:100%">保存</button>
+		</div>
+	</div>
+</form>
+<script>
+	<if condition="isset($_GET['id'])">
+	$(function(){
+		var fo = new FindOption({url:'<Api runat="server" control="#__DYNAMIC_CONTROL__" action="find"/>',params:{ID:<%=Request::get('id')%>},formElement:$('#form1')});
+	});
+	</if>
+</script>

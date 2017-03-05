@@ -1,25 +1,27 @@
 <form id="form1" class="layui-form layui-form-pane" action="<Api runat="server" control="__CONTROL__" action="__ACTION__"/>" method="post">
-	<div class="layui-form-item">
-		<label class="layui-form-label">用户名</label>
-		<div class="layui-input-inline">
-			<input type="text" readonly value="<%=$user['Username']%>" class="layui-input"/>
+	<div class="col-md-12">
+		<div class="layui-form-item">
+			<label class="layui-form-label">用户名</label>
+			<div class="layui-input-inline">
+				<input type="text" readonly value="<%=$user['Username']%>" class="layui-input"/>
+			</div>
 		</div>
-	</div>
-	<div class="layui-form-item">
-		<label class="layui-form-label">昵称</label>
-		<div class="layui-input-inline">
-			<input type="text" name="Name" value="<%=$user['Name']%>" class="layui-input"/>
+		<div class="layui-form-item">
+			<label class="layui-form-label">昵称</label>
+			<div class="layui-input-inline">
+				<input type="text" name="Name" value="<%=$user['Name']%>" class="layui-input"/>
+			</div>
 		</div>
-	</div>
-	<div class="layui-form-item">
-		<label class="layui-form-label">密码</label>
-		<div class="layui-input-inline">
-			<input type="text" data-name="password" placeholder="不修改则留空" autocomplete="off" class="layui-input"/>
+		<div class="layui-form-item">
+			<label class="layui-form-label">密码</label>
+			<div class="layui-input-inline">
+				<input type="text" data-name="password" placeholder="不修改则留空" autocomplete="off" class="layui-input"/>
+			</div>
+			<div class="layui-form-mid layui-word-aux"></div>
 		</div>
-		<div class="layui-form-mid layui-word-aux"></div>
-	</div>
-	<div class="center">
-		<button class="layui-btn" lay-submit>保存</button>
+		<div class="center">
+			<button class="layui-btn" lay-submit>保存</button>
+		</div>
 	</div>
 </form>
 <script>

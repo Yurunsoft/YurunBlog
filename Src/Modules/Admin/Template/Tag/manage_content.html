@@ -1,0 +1,99 @@
+<div class="col-md-12">
+	<h3><%=$tag['Name']%></h3>
+	<form id="form_query" class="layui-form layui-form-pane">
+		<div class="button-group-bar">
+			<div class="pull-left">
+				<!--<a class="btn btn-default btn-add"><i class="glyphicon glyphicon-plus green"></i> 添加</a>-->
+			</div>
+			<div class="pull-right">
+				<div class="layui-form-item">
+					<div class="layui-input-inline">
+						<input type="text" name="query.Search" class="layui-input" placeholder="搜索:标题"/>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-input-inline">
+						<input type="hidden" name="Type" value="<%=$tag['Type']%>"/>
+						<input type="hidden" name="query.TagID" value="<%=$tag['ID']%>"/>
+						<button class="layui-btn"><i class="layui-icon">&#xe615;</i> 搜索</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+	<div class="table-parent table-responsive cb">
+		<table class="table" id="table">
+			<thead>
+				<tr>
+					<th width="60">ID</th>
+					<th width="80">状态</th>
+					<th width="100">作者</th>
+					<th width="100">分类</th>
+					<th width="250">标题</th>
+					<th width="100">评论/浏览</th>
+					<th width="150">发布时间</th>
+					<th width="150">更新时间</th>
+					<th width="100" class="center">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+	</div>
+	<div id="pagebar"></div>
+</div>
+<script id="template" type="text/html">
+{{# layui.each(d.list, function(index, item){ }}
+	<tr>
+		<td>{{ item.ID }}</td>
+		<td>{{ item.StatusText }}</td>
+		<td>{{ item.AuthorName }}</td>
+		<td>{{ item.CategoryName }}</td>
+		<td><a href="{{ item.Url }}" target="_blank">{{ item.Title }}</a></td>
+		<td>{{ item.Comments }}/{{ item.View }}</td>
+		<td>{{ item.PostTime }}</td>
+		<td>{{ item.UpdateTime }}</td>
+		<td class="center" style="vertical-align: middle;">
+			<button data-id="{{ item.ID }}" class="btn btn-sm btn-sm-delete glyphicon glyphicon-remove" title="删除"></button>
+		</td>
+	</tr>
+{{#  }); }}
+</script>
+
+<script>
+	var queryOption = new QueryOption({
+		template:$('#template').html(),
+		contentElement:$('#table tbody'),
+		queryUrl:'<Api runat="server" control="TagManage" action="query"/>',
+		pagebarElement:$('#pagebar'),
+		isBindForm:true,
+		bindFormElement:$('#form_query')
+	});
+	$('.btn-add').click(function(){
+		var action = new PopupOption({url:'<url='Content/select'/>',title:'添加内容',size:['1000px','800px'],onSuccess:function(data){
+			$.ajax({
+				type: 'POST',
+				url: '<Api runat="server" control="TagManage" action="add"/>',
+				data: {TagID:<%=$tag['ID']%>,RelationID:data.ID},
+				success: (data) => {
+					if (data.success)
+					{
+						queryOption.query();
+					}
+					else
+					{
+						top.layer.alert(data.message, { icon: 2 });
+					}
+				},
+				error: function (error) {
+					top.layer.alert('服务器出现错误，请重试！', { icon: 2 });
+				}
+			});
+		}});
+	});
+	$('body').on('click','.btn-sm-delete',function(){
+		var action = new ActionOption({url:'<Api runat="server" control="TagManage" action="delete"/>',params:{ID:$(this).attr('data-id')},onSuccess:function(data){
+			queryOption.query();
+		}});
+	})
+</script>

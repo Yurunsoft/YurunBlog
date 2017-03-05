@@ -3,7 +3,7 @@ defined('YURUN_START') or exit;
 /**
  * YurunBlog版本信息
  */
-define('YB_VERSION','0.0.1');
+define('YB_VERSION','0.0.2');
 /**
  * YurunBlog字母版本号
  * @Dev 开发版
@@ -31,7 +31,7 @@ Event::register('YURUN_APP_LOAD_COMPLETE',function(){
 /**
  * 生成URL
  */
-Event::register('YP_URL_CREATE', function(&$data){
+Event::register('YP_URL_CREATE', function($data){
 	UrlHelper::parse($data);
 });
 /**

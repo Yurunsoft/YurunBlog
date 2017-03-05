@@ -21,12 +21,34 @@ class ContentModel extends BaseModel
 			 ->join('left',$this->tableName('category') . ' as category',"{$tableName}.CategoryID = category.ID")
 			 ;
 	}
+	public function __selectOneAfter(&$data)
+	{
+		static $tagContentModel;
+		if(null === $tagContentModel)
+		{
+			$tagManageContentModel = new TagManageContentModel;
+		}
+		$data['Tags'] = $tagManageContentModel->selectByContentID($data['ID']);
+		switch((int)$data['Type'])
+		{
+			case CONTENT_TYPE_ARTICLE:
+				$data['Url'] = Dispatch::url('Article/view',$data);
+				break;
+			case CONTENT_TYPE_PAGE:
+				$data['Url'] = Dispatch::url('Page/view',$data);
+				break;
+		}
+		return parent::__selectOneAfter($data);
+	}
 	/**
 	 * 处理查询条件
 	 */
 	public function parseCondition($data)
 	{
-		$this->where(array($this->tableName() . '.Type'=>$this->type));
+		if($this->type > 0)
+		{
+			$this->where(array($this->tableName() . '.Type'=>$this->type));
+		}
 		if(!empty($data['CategoryID']))
 		{
 			$categoryModel = new CategoryModel;
@@ -45,11 +67,12 @@ class ContentModel extends BaseModel
 
 	public function __addBefore(&$data)
 	{
-		$params = array(&$data);
-		$eventResult = Event::trigger('YB_ADD_ARTICLE_BEFORE',$params);
+		$params = array('data'=>&$data,'result'=>&$eventResult);
+		Event::trigger('YB_ADD_ARTICLE_BEFORE',$params);
 		if(null !== $eventResult && true !== $eventResult)
 		{
-			return $eventResult;
+			$this->error = $eventResult;
+			return false;
 		}
 		if(isEmpty($data['Alias']))
 		{
@@ -83,11 +106,12 @@ class ContentModel extends BaseModel
 	}
 	public function __addAfter(&$data,$result)
 	{
-		$params = array(&$data,$result);
-		$eventResult = Event::trigger('YB_ADD_ARTICLE_AFTER',$params);
+		$params = array('data'=>&$data,'addResult'=>$result,'result'=>&$eventResult);
+		Event::trigger('YB_ADD_ARTICLE_AFTER',$params);
 		if(null !== $eventResult && true !== $eventResult)
 		{
-			return $eventResult;
+			$this->error = $eventResult;
+			return false;
 		}
 		if($data['AliasAuto'] && !$this->wherePk($result)->edit(array('ID'=>$result,'Alias'=>$result)))
 		{
@@ -106,11 +130,12 @@ class ContentModel extends BaseModel
 	}
 	public function __editBefore(&$data)
 	{
-		$params = array(&$data);
-		$eventResult = Event::trigger('YB_EDIT_ARTICLE_BEFORE',$params);
+		$params = array('data'=>&$data,'result'=>&$eventResult);
+		Event::trigger('YB_EDIT_ARTICLE_BEFORE',$params);
 		if(null !== $eventResult && true !== $eventResult)
 		{
-			return $eventResult;
+			$this->error = $eventResult;
+			return false;
 		}
 		if(isset($data['Alias']))
 		{
@@ -146,11 +171,12 @@ class ContentModel extends BaseModel
 	}
 	public function __editAfter(&$data,$result)
 	{
-		$params = array(&$data,$result);
-		$eventResult = Event::trigger('YB_EDIT_ARTICLE_AFTER',$params);
+		$params = array('data'=>&$data,'editResult'=>$result,'result'=>&$eventResult);
+		Event::trigger('YB_EDIT_ARTICLE_AFTER',$params);
 		if(null !== $eventResult && true !== $eventResult)
 		{
-			return $eventResult;
+			$this->error = $eventResult;
+			return false;
 		}
 		if(!empty($data['CategoryID']))
 		{
@@ -168,11 +194,12 @@ class ContentModel extends BaseModel
 	}
 	public function __saveBefore(&$data)
 	{
-		$params = array(&$data);
-		$eventResult = Event::trigger('YB_SAVE_ARTICLE_BEFORE',$params);
+		$params = array('data'=>&$data,'result'=>&$eventResult);
+		Event::trigger('YB_SAVE_ARTICLE_BEFORE',$params);
 		if(null !== $eventResult && true !== $eventResult)
 		{
-			return $eventResult;
+			$this->error = $eventResult;
+			return false;
 		}
 		if(isset($data['Title']))
 		{
@@ -183,9 +210,13 @@ class ContentModel extends BaseModel
 			}
 			$data['Title'] = htmlspecialchars($data['Title']);
 		}
-		if(isEmpty($data['UpdateTime']))
+		if(!isset($data['ID']) || (isEmpty($data['UpdateTime']) && (!isset($data['LockUpdateTime']) || !$data['LockUpdateTime'])))
 		{
 			$data['UpdateTime'] = date('Y-m-d H:i:s');
+		}
+		else
+		{
+			unset($data['UpdateTime']);
 		}
 		if(isset($data['Top']))
 		{
@@ -207,21 +238,33 @@ class ContentModel extends BaseModel
 	}
 	public function __saveAfter(&$data,$result)
 	{
-		$params = array(&$data,$result);
-		$eventResult = Event::trigger('YB_SAVE_ARTICLE_AFTER',$params);
+		$params = array('data'=>&$data,'saveResult'=>$result,'result'=>&$eventResult);
+		Event::trigger('YB_SAVE_ARTICLE_AFTER',$params);
 		if(null !== $eventResult && true !== $eventResult)
 		{
-			return $eventResult;
+			$this->error = $eventResult;
+			return false;
+		}
+		// 处理标签
+		if(isset($data['Tags']))
+		{
+			$tagManageModel = new TagManageContentModel;
+			if(!$tagManageModel->saveRelations(isset($data['ID']) ? $data['ID'] : $result,$data['Tags']))
+			{
+				$this->error = $tagManageModel->error;
+				return false;
+			}
 		}
 		return parent::__saveAfter($data,$result);
 	}
 	public function __deleteBefore(&$pkData)
 	{
-		$params = array(&$pkData);
-		$eventResult = Event::trigger('YB_DELETE_ARTICLE_BEFORE',$params);
+		$params = array('pkData'=>&$pkData,'result'=>&$eventResult);
+		Event::trigger('YB_DELETE_ARTICLE_BEFORE',$params);
 		if(null !== $eventResult && true !== $eventResult)
 		{
-			return $eventResult;
+			$this->error = $eventResult;
+			return false;
 		}
 		$info = $this->getByPk($pkData);
 		if(!isset($info['CategoryID']))
@@ -237,11 +280,12 @@ class ContentModel extends BaseModel
 	}
 	public function __deleteAfter($result)
 	{
-		$params = array($result);
-		$eventResult = Event::trigger('YB_DELETE_ARTICLE_AFTER',$params);
+		$params = array('deleteResult'=>$result,'result'=>&$eventResult);
+		Event::trigger('YB_DELETE_ARTICLE_AFTER',$params);
 		if(null !== $eventResult && true !== $eventResult)
 		{
-			return $eventResult;
+			$this->error = $eventResult;
+			return false;
 		}
 		if($this->lastCategoryID > 0)
 		{
@@ -265,5 +309,43 @@ class ContentModel extends BaseModel
 			'Index',
 			'UpdateTime'	=>	'desc'
 		));
+	}
+	/**
+	 * 给内容加浏览量
+	 * @param int $id 
+	 * @param int $view 
+	 * @return mixed 
+	 */
+	public function incView($id,$view = 1)
+	{
+		return $this->wherePk($id)->inc(array('View'=>$view));
+	}
+	/**
+	 * 给内容加评论数
+	 * @param int $id 
+	 * @param int $comments 
+	 * @return mixed 
+	 */
+	public function incComments($id,$comments = 1)
+	{
+		return $this->wherePk($id)->inc(array('Comments'=>$comments));
+	}
+	public function selectRelatedContentByTagIDs($tagIDs,$contentID = 0,$page = 1,$show = 10,&$recordCount = null)
+	{
+		if(!isset($tagIDs[0]))
+		{
+			return array();
+		}
+		$tagRelationTableName = $this->tableName('tag_relation');
+		$tableName = $this->tableName();
+		return $this->from($tagRelationTableName)
+					->join('',$tableName,$tagRelationTableName . '.RelationID=' . $tableName . '.ID')
+					->order(array(
+						'Index',
+						'UpdateTime'	=>	'desc'
+					))
+					->where(array($tagRelationTableName . '.TagID'=>array('in',$tagIDs),$tableName . '.ID'=>array('<>',$contentID)))
+					->distinct(true)
+					->selectPage();
 	}
 }

@@ -1,0 +1,78 @@
+<div class="table-toolbar">
+	<form class="layui-form form-inline" id="form1">
+		<div class="pull-left">
+			<div class="form-group">
+				<a class="layui-btn layui-btn-primary btn-add"><i class="glyphicon glyphicon-plus green"></i> 新建</a>
+			</div>
+		</div>
+		<div class="pull-right">
+			<div class="form-group">
+				<div class="input-group">
+					<div class="input-group-addon">标签类型</div>
+					<select runat="server" name="query.Type" data_func="BaseDict::get" data_func_args="#array(TAG_TYPE)" name="query.Status"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<button class="layui-btn"><i class="layui-icon">&#xe615;</i> 搜索</button>
+			</div>
+		</div>
+	</form>
+</div>
+<div class="table-parent table-responsive">
+	<table class="table" id="table">
+		<thead>
+			<tr>
+				<th width="80">ID</th>
+				<th width="100">名称</th>
+				<th width="100">类型</th>
+				<th width="100">代码</th>
+				<th width="100" class="center">操作</th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
+</div>
+<script id="template" type="text/html">
+{{# layui.each(d.list, function(index, item){ }}
+	<tr>
+		<td>{{ item.ID }}</td>
+		<td>{{ item.Name }}</td>
+		<td>{{ item.TypeName }}</td>
+		<td>{{ item.Code }}</td>
+		<td class="center">
+			<button data-id="{{ item.ID }}" class="btn btn-sm btn-sm-manage glyphicon glyphicon-tasks" title="管理"></button>
+			<button data-id="{{ item.ID }}" class="btn btn-sm btn-sm-edit glyphicon glyphicon-edit" title="编辑"></button>
+			<button data-id="{{ item.ID }}" class="btn btn-sm btn-sm-delete glyphicon glyphicon-remove" title="删除"></button>
+		</td>
+	</tr>
+{{#  }); }}
+</script>
+
+<script>
+	var queryOption = new QueryOption({
+		template:$('#template').html(),
+		contentElement:$('#table tbody'),
+		queryUrl:'<Api runat="server" control="Tag" action="query"/>'
+	});
+	$('.btn-add').click(function(){
+		var action = new PopupOption({url:'<url='add'/>',title:'新建标签',size:['450px','400px'],onSuccess:function(data){
+			queryOption.query();
+		}});
+	});
+	$('body').on('click','.btn-sm-edit',function(){
+		var action = new PopupOption({url:'<url='update'/>',params:{id:$(this).attr('data-id')},title:'编辑标签',size:['450px','400px'],onSuccess:function(data){
+			queryOption.query();
+		}});
+	})
+	$('body').on('click','.btn-sm-delete',function(){
+		var action = new ActionOption({url:'<Api runat="server" control="Tag" action="delete"/>',params:{ID:$(this).attr('data-id')},onSuccess:function(data){
+			queryOption.query();
+		}});
+	})
+	$('body').on('click','.btn-sm-manage',function(){
+		var action = new PopupOption({url:'<url='manage'/>',params:{id:$(this).attr('data-id')},title:'标签管理',size:['450px','400px'],isMax:true,onSuccess:function(data){
+			queryOption.query();
+		}});
+	})
+</script>

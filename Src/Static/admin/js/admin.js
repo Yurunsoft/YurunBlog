@@ -169,6 +169,20 @@ $(function(){
 	})
 	$('.menu-list > li.active').addClass('active').find('.sub-list').slideDown();
 })
+function getCommentStatusColor(status)
+{
+	switch(parseInt(status))
+	{
+		case 1:
+			return 'green';
+		case 2:
+			return 'red';
+		case 3:
+			return 'orange';
+		default:
+			return '#000'
+	}
+}
 var form;
 $(function(){
 	form = layui.form();

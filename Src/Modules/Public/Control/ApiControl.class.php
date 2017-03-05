@@ -44,13 +44,13 @@ class ApiControl extends BaseControl
 					{
 						throw new Exception('没有@api标记');
 					}
-					if (false !== stripos($comment, '@UserToken'))
+					if($this->checkUserSession(false))
 					{
-						if($this->checkUserSession(false))
-						{
-							Globals::$user = $this->userSession->userInfo;
-						}
-						else
+						Globals::$user = $this->userSession->userInfo;
+					}
+					else
+					{
+						if (false !== stripos($comment, '@UserToken'))
 						{
 							$this->parseResult(false, '需要登录后才可调用API');
 						}

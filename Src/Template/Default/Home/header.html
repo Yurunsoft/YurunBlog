@@ -1,5 +1,5 @@
 <?php defined('YB_VERSION') or exit;?>
-<nav id="navbar" class="navbar navbar-inverse navbar-fixed-top">
+<nav id="navbar" class="navbar navbar-inverse">
 	<div class="container">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
@@ -25,7 +25,7 @@
 					('Article' === __DYNAMIC_CONTROL__ && 'view' === __DYNAMIC_ACTION__ && $articleInfo['CategoryID'] === $value['ID'])
 					"> active</if><if condition="isset($value['Children'])"> dropdown</if>">
 						<if condition="isset($value['Children'])">
-							<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><%=$value['Name']%> <span class="caret"></span></a>
+							<a href="<%=$value['Url']%>" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><%=$value['Name']%> <span class="caret"></span></a>
 							<ul class="dropdown-menu">
 								<foreach list="$value['Children']" value="child">
 								<li><a href="<%=$child['Url']%>"><%=$child['Name']%></a></li>

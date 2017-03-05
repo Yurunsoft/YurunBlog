@@ -205,13 +205,13 @@ class UserSession extends BaseModel
 			return false;
 		}
 		// 根据UID获取用户信息
-		$userInfo = $this->getBy($this->rememberCookieUIDFieldNameFieldName, $uid);
+		$this->userInfo = $this->getBy($this->rememberCookieUIDFieldNameFieldName, $uid);
 		// 判断用户信息是否存在
-		if(!isset($userInfo[$this->pk]))
+		if(!isset($this->userInfo[$this->pk]))
 		{
 			return false;
 		}
-		return $hash === $this->parseCookieHash($userInfo[$this->rememberCookieUIDFieldNameFieldName],$time);
+		return $hash === $this->parseCookieHash($this->userInfo[$this->rememberCookieUIDFieldNameFieldName],$time);
 	}
 	/**
 	 * 处理密码加盐

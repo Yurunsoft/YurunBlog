@@ -2,6 +2,7 @@
 abstract class TagManageModel extends BaseModel
 {
 	public $table = 'tag_relation';
+	public $type = 0;
 	public function __saveBefore(&$data)
 	{
 		unset($data['Type']);

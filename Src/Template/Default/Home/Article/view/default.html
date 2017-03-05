@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<include name="@app/public_static"/>
+		<include name="@app/public_header"/>
 		<include name="/public_static"/>
 	</head>
 	<body>
@@ -11,15 +11,40 @@
 			<div id="left-box" class="content-container">
 				<div class="article-view">
 					<h1><%=$articleInfo['Title']%></h1>
-					<div class="article-info">
+					<div class="article-info article-info-center">
 						<span class="time"><i class="glyphicon glyphicon-time"></i><%=$articleInfo['UpdateTime']%></span>
 						<span class="author"><i class="glyphicon glyphicon-user"></i><a href="javascript:layer.alert('正在玩命开发中……',{icon:6});"><%=$articleInfo['AuthorName']%></a></span>
 						<span class="category"><i class="glyphicon glyphicon-folder-open"></i><a href="<Url='Article/list',array('ID'=>$articleInfo['CategoryID'])/>"><%=$articleInfo['CategoryName']%></a></span>
+						<span class="view"><i class="glyphicon glyphicon-eye-open"></i><%=$articleInfo['View']%></span>
+						<span class="comment"><a href="#comment"><i class="glyphicon glyphicon-comment"></i><%=$articleInfo['Comments']%></a></span>
 					</div>
 					<div class="article-content">
 						<%=$articleInfo['Content']%>
 					</div>
 				</div>
+				<div class="layui-tab layui-tab-brief">
+					<ul class="layui-tab-title">
+						<li class="layui-this"><b>标签</b></li>
+					</ul>
+					<div class="article-tags">
+						<span class="layui-breadcrumb">
+							<foreach list="$articleInfo['Tags']">
+								<a href="<url='Tag/view',$value/>" target="_blank"><%=$value['Name']%></a>
+							</foreach>
+						</span>
+					</div>
+				</div>
+				<div class="layui-tab layui-tab-brief">
+					<ul class="layui-tab-title">
+						<li class="layui-this"><b>相关文章</b></li>
+					</ul>
+					<ul class="article-list-text article-list-text-col-2 article-list-dotted">
+						<foreach list="$relatedContents">
+							<li><a href="<%=$value['Url']%>" target="_blank"><%=$value['Title']%></a></li>
+						</foreach>
+					</ul>
+				</div>
+				<Comment runat="server" content_id="#$articleInfo['ID']"/>
 			</div>
 			<include name="/right"/>
 		</div>

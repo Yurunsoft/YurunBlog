@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<include name="@app/public_static"/>
+		<include name="@app/public_header"/>
 		<include name="/public_static"/>
 	</head>
 	<body>
@@ -22,6 +22,8 @@
 							<span class="time"><i class="glyphicon glyphicon-time"></i><%=$value['UpdateTime']%></span>
 							<span class="author"><i class="glyphicon glyphicon-user"></i><a href="javascript:layer.alert('正在玩命开发中……',{icon:6});"><%=$value['AuthorName']%></a></span>
 							<span class="category"><i class="glyphicon glyphicon-folder-open"></i><a href="<Url='Article/list',array('ID'=>$value['CategoryID'])/>"><%=$value['CategoryName']%></a></span>
+							<span class="view"><i class="glyphicon glyphicon-eye-open"></i><%=$value['View']%></span>
+							<span class="comment"><a href="<%=$value['Url']%>#comment" target="_blank"><i class="glyphicon glyphicon-comment"></i><%=$value['Comments']%></a></span>
 						</div>
 						<div class="article-content">
 							<%=$value['Summary']%>

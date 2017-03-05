@@ -16,7 +16,13 @@
 			<li class="layui-this">最新评论</li>
 		</ul>
 		<div class="layui-tab-content">
-			敬请期待！
+			<ul class="comment-list-text">
+				<foreach list="$newestComments">
+				<li>
+					<span class="before-title"><%=$value['Name']%>：</span><a href="<%=$value['ExContent']['Url']%>#comment-<%=$value['ID']%>" target="_blank"><%=$value['Content']%></a>
+				<li>
+				</foreach>
+			</ul>
 		</div>
 	</div>
 </div>

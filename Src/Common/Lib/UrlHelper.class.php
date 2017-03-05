@@ -19,7 +19,29 @@ abstract class UrlHelper
 	}
 	public function Article_view($data)
 	{
+		static $articleModel;
+		if(!isset($data['param']['Alias']) && isset($data['param']['ID']))
+		{
+			if(null === $articleModel)
+			{
+				$articleModel = new CategoryModel;
+			}
+			$data['param'] = $articleModel->getByPk($data['param']['ID']);
+		}
 		$data['result'] = Dispatch::url('Home/Article/view',array('Alias'=>$data['param']['Alias']));
+	}
+	public function Page_view($data)
+	{
+		static $pageModel;
+		if(!isset($data['param']['Alias']) && isset($data['param']['ID']))
+		{
+			if(null === $pageModel)
+			{
+				$pageModel = new CategoryModel;
+			}
+			$data['param'] = $pageModel->getByPk($data['param']['ID']);
+		}
+		$data['result'] = Dispatch::url('Home/Page/view',array('Alias'=>$data['param']['Alias']));
 	}
 	public function Article_list($data)
 	{
@@ -46,5 +68,18 @@ abstract class UrlHelper
 			$param['page'] = $page;
 		}
 		$data['result'] = Dispatch::url('Home/Article/list',$param);
+	}
+	public function Tag_view($data)
+	{
+		static $tagModel;
+		if(!isset($data['param']['Code']) && isset($data['param']['ID']))
+		{
+			if(null === $tagModel)
+			{
+				$tagModel = new TagModel;
+			}
+			$data['param'] = $tagModel->getByPk($data['param']['ID']);
+		}
+		$data['result'] = Dispatch::url('Home/Tag/view',array('Alias'=>$data['param']['Code']));
 	}
 }

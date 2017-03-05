@@ -13,11 +13,15 @@ class ArticleControl extends HomeBaseControl
 		{
 			Response::msg('文章不存在',null,404);
 		}
+		// 文章浏览量+1
+		$articleModel->incView($articleInfo['ID']);
+		++$articleInfo['View'];
 		$this->parseHeadInfo(array(
 			'Article'	=>	$articleInfo
 		));
 		$this->view->articleInfo = $articleInfo;
 		$this->view->display('@theme/@module/@control/view/' . $articleInfo['Template']);
+		Event::trigger('YB_ARTICLE_VIEW',array('article'=>$articleInfo));
 	}
 	/**
 	 * 文章列表
@@ -44,5 +48,6 @@ class ArticleControl extends HomeBaseControl
 		$this->view->totalPages = $totalPages;
 		$this->view->currPage = $page;
 		$this->view->display('@theme/@module/@control/list/' . $categoryInfo['CategoryTemplate']);
+		Event::trigger('YB_ARTICLE_LIST_VIEW',array('category'=>$categoryInfo));
 	}
 }
