@@ -348,4 +348,16 @@ class ContentModel extends BaseModel
 					->distinct(true)
 					->selectPage();
 	}
+	/**
+	 * 获取内容浏览数量
+	 * @param int $id 
+	 * @return int 
+	 */
+	public function getView($id)
+	{
+		return $this->selectBefore(false)
+					->field('View')
+					->wherePk($id)
+					->selectValue();
+	}
 }

@@ -35,7 +35,7 @@ CONTENT
 		$list = $db->queryA('select Alias from ' . $categoryModel->tableName());
 		foreach($list as $item)
 		{
-			self::writeItem(Dispatch::url('Article/list',$item),date('Y-m-d'),'monthly','0.6');
+			self::writeItem('http:' . Dispatch::url('Article/list',$item),date('Y-m-d'),'monthly','0.6');
 		}
 
 		// 文章
@@ -43,7 +43,7 @@ CONTENT
 		$list = $db->queryA('select Alias,UpdateTime from ' . $articleModel->tableName() . ' where Type = ' . $articleModel->type);
 		foreach($list as $item)
 		{
-			self::writeItem(Dispatch::url('Article/view',$item),date('Y-m-d',strtotime($item['UpdateTime'])),'monthly','0.8');
+			self::writeItem('http:' . Dispatch::url('Article/view',$item),date('Y-m-d',strtotime($item['UpdateTime'])),'monthly','0.8');
 		}
 
 

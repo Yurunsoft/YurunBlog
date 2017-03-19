@@ -3,7 +3,7 @@ defined('YURUN_START') or exit;
 /**
  * YurunBlog版本信息
  */
-define('YB_VERSION','0.0.2');
+define('YB_VERSION','0.0.3');
 /**
  * YurunBlog字母版本号
  * @Dev 开发版

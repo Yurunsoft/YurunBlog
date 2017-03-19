@@ -36,6 +36,7 @@ class CommentAPI extends BaseAPI
 		$p = new Page($commentList->total_records,(int)Config::get('@.COMMENTS_SHOW'),1);
 		$this->data['pages'] = $p->getTotalPages();
 		$this->data['page'] = $page;
+		$this->data['comments'] = $commentList->total_records;
 	}
 	/**
 	 * @API

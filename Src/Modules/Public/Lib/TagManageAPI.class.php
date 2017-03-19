@@ -26,7 +26,7 @@ class TagManageAPI extends BaseAPI
 	{
 		$this->__add(array(
 			'saveOptions'	=>	array(
-				'main'	=>	new APISaveOptionItem(array('type'=>APISaveOptionItem::TYPE_SINGLE,'dataFromMethod'=>'post','dataCallback'=>array($this->model,'parseData')))
+				'main'	=>	new APISaveOptionItem(array('type'=>APISaveOptionItem::TYPE_SINGLE,'dataFromMethod'=>'post'))
 			),
 		));
 	}
@@ -38,6 +38,10 @@ class TagManageAPI extends BaseAPI
 	 */
 	public function delete()
 	{
-		$this->__delete();
+		$this->success = $this->model->where(array('TagID'=>Request::all('TagID'),'RelationID'=>Request::all('RelationID')))->delete();
+		if(false === $this->success)
+		{
+			$this->message = '删除失败';
+		}
 	}
 }

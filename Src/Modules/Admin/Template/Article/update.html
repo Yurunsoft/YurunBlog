@@ -23,7 +23,7 @@
 		<div class="layui-form-item">
 			<label class="layui-form-label">分类</label>
 			<div class="layui-input-block">
-				<CategorySelect runat="server" name="CategoryID"/>
+				<CategorySelect runat="server" name="CategoryID" lay-filter="CategoryID"/>
 			</div>
 		</div>
 		<div class="layui-form-item">
@@ -121,4 +121,21 @@
 		}});
 	}
 	</if>
+	var CategoryIDChangeFlag = 0;
+	$(function(){
+		form.on('select(CategoryID)', function(data){
+			var t = ++CategoryIDChangeFlag;
+			var fo = new FindOption({url:'<Api runat="server" control="Category" action="find"/>',params:{ID:data.value}
+			,onSuccess:function(data){
+				if(CategoryIDChangeFlag === t)
+				{
+					if(data.success)
+					{
+						$('select[name=Template]').val(data.data.ArticleTemplate);
+						layui.form().render();
+					}
+				}
+			}});
+		});
+	});
 </script>

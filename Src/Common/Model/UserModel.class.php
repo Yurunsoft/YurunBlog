@@ -40,22 +40,33 @@ class UserModel extends UserSession
 	/**
 	 * 处理数据
 	 */
-	public function __saveBefore(&$data)
+	public function __editBefore(&$data)
 	{
 		if(isEmpty($data['Password']))
 		{
-			if(!isset($data['ID']))
-			{
-				$this->error = '请输入密码';
-				return false;
-			}
 			unset($data['Password']);
 		}
 		else
 		{
 			$data['Password'] = $this->parsePassword($data['Password']);
 		}
-		return parent::__saveBefore($data);
+		return parent::__editBefore($data);
+	}
+	/**
+	 * 处理数据
+	 */
+	public function __addBefore(&$data)
+	{
+		if(isEmpty($data['Password']))
+		{
+			$this->error = '请输入密码';
+			return false;
+		}
+		else
+		{
+			$data['Password'] = $this->parsePassword($data['Password']);
+		}
+		return parent::__addBefore($data);
 	}
 	/**
 	 * 保存用户资料

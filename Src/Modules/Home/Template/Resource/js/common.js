@@ -116,36 +116,6 @@ function htmlspecialchars_decode(str){
 	str = str.replace(/&#039;/g, "'");
 	return str;
 }
-function loadComments(contentID,page)
-{
-	if(void 0 === page)
-	{
-		page = 1;
-	}
-	$.ajax({
-		type: 'GET',
-		url: buildQuery('<Api runat="server" control="Comment" action="add"/>',{ContentID:contentID,page:page}),
-		data: $('#CommentForm').serialize(),
-		success: function(data){
-			if(void 0 === typeof(data.success))
-			{
-				layer.alert('服务器错误，请稍后重试！',{icon:2});
-				return;
-			}
-			if(data.success)
-			{
-
-			}
-			else
-			{
-				layer.alert(data.message,{icon:2});
-			}
-		},
-		error: function(data){
-			layer.alert('服务器错误，请稍后重试！',{icon:2});
-		}
-	});
-}
 function isWeiXin(){
     var ua = window.navigator.userAgent.toLowerCase();
     if(ua.match(/MicroMessenger/i) == 'micromessenger'){
@@ -193,6 +163,7 @@ function loadComments(contentID,page)
 			if(void 0 !== typeof(data.success) && data.success)
 			{
 				$('#CommentList').html(data.content);
+				$('#YBArticleComments').html(data.comments);
 				CommentCurrPage = data.page;
 				layui.laypage({
 					cont: 'CommentPagebar'
@@ -296,5 +267,22 @@ function parseComment()
 		setCookie('comment_email',form.find('[name=Email]').val(),seconds);
 		setCookie('comment_qq',form.find('[name=QQ]').val(),seconds);
 		return false;
+	});
+}
+function contentPing(id)
+{
+	$.ajax({
+		type: 'GET',
+		url: buildQuery('<Api runat="server" control="Content" action="ping"/>',{ID:id}),
+		success:function(data){
+			$('#YBArticleView').html(data.view);
+		}
+	});
+}
+function initYurunBlog()
+{
+	$(function(){
+		parseComment();
+		getUserInfo();
 	});
 }

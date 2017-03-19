@@ -111,6 +111,10 @@ function isDateInvalid(date)
 }
 function databindFormElement(data,formElement)
 {
+    if(null === formElement)
+    {
+        return;
+    }
     for(var key in data)
     {
         var element = formElement.find('[name='+key+']');

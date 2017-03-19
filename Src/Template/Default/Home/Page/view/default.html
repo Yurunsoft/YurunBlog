@@ -15,8 +15,8 @@
 						<span class="time"><i class="glyphicon glyphicon-time"></i><%=$pageInfo['UpdateTime']%></span>
 						<span class="author"><i class="glyphicon glyphicon-user"></i><a href="javascript:layer.alert('正在玩命开发中……',{icon:6});"><%=$pageInfo['AuthorName']%></a></span>
 						<span class="category"><i class="glyphicon glyphicon-folder-open"></i><a href="<Url='Article/list',array('ID'=>$pageInfo['CategoryID'])/>"><%=$pageInfo['CategoryName']%></a></span>
-						<span class="view"><i class="glyphicon glyphicon-eye-open"></i><%=$pageInfo['View']%></span>
-						<span class="comment"><a href="#comment"><i class="glyphicon glyphicon-comment"></i><%=$pageInfo['Comments']%></a></span>
+						<span class="view"><i class="glyphicon glyphicon-eye-open"></i><span id="YBArticleView"><%=$pageInfo['View']%></span></span>
+						<span class="comment"><a href="#comment"><i class="glyphicon glyphicon-comment"></i><span id="YBArticleComments"><%=$pageInfo['Comments']%></span></a></span>
 					</div>
 					<div class="article-content">
 						<%=$pageInfo['Content']%>
@@ -39,5 +39,8 @@
 			<include name="/right"/>
 		</div>
 		<include name="/footer"/>
+		<script>
+			contentPing(<%=$articleInfo['ID']%>);
+		</script>
 	</body>
 </html>

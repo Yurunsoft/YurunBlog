@@ -107,6 +107,9 @@ function isDateInvalid(date) {
     return d.toString() == 'Invalid Date' || (date.indexOf('1899') < 0 && d.toString().indexOf('1899') > -1);
 }
 function databindFormElement(data, formElement) {
+    if (null === formElement) {
+        return;
+    }
     for (var key in data) {
         var element = formElement.find('[name=' + key + ']');
         if (element.length == 0) {

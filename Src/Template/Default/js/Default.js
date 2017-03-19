@@ -23,9 +23,8 @@ function parseContentImg()
 		// Options will go here
 	});
 }
+initYurunBlog();
 $(function(){
-	parseComment();
-	getUserInfo();
 	parseContentImg();
 	SyntaxHighlighter.all();
 	// 微信不允许浮动，不然会强制给你转网页格式

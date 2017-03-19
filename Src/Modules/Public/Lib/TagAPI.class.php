@@ -36,7 +36,7 @@ class TagAPI extends BaseAPI
 	{
 		$this->__add(array(
 			'saveOptions'	=>	array(
-				'main'	=>	new APISaveOptionItem(array('type'=>APISaveOptionItem::TYPE_SINGLE,'dataFromMethod'=>'post','dataCallback'=>array($this->model,'parseData')))
+				'main'	=>	new APISaveOptionItem(array('type'=>APISaveOptionItem::TYPE_SINGLE,'dataFromMethod'=>'post'))
 			),
 		));
 	}
@@ -50,7 +50,7 @@ class TagAPI extends BaseAPI
 	{
 		$this->__update(array(
 			'saveOptions'	=>	array(
-				'main'	=>	new APISaveOptionItem(array('type'=>APISaveOptionItem::TYPE_SINGLE,'dataFromMethod'=>'post','dataCallback'=>array($this->model,'parseData')))
+				'main'	=>	new APISaveOptionItem(array('type'=>APISaveOptionItem::TYPE_SINGLE,'dataFromMethod'=>'post'))
 			),
 		));
 	}

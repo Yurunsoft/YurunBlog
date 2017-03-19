@@ -7,22 +7,30 @@ class IndexControl extends HomeBaseControl
 	 */
 	public function index($page = 1)
 	{
-		if(1 === $page)
+		$cacheName = 'Home/Index/index/' . $page;
+		$cache = Cache::get($cacheName);
+		if(false === $cache)
 		{
-			$this->parseHeadInfo(array(),'first');
+			if(1 === $page)
+			{
+				$this->parseHeadInfo(array(),'first');
+			}
+			else
+			{
+				$this->parseHeadInfo(array(
+					'CurrPage'	=>	$page
+				));
+			}
+			$articleModel = new ArticleModel;
+			$this->view->articleList = $articleModel->homeSelect()
+													->orderByNew()
+													->selectList(array(),$page,Config::get('@.SHOW_NUMBER.Home'),$totalPages);
+			$this->view->totalPages = $totalPages;
+			$this->view->currPage = $page;
+			$cache = $this->view->getHtml();
+			Cache::set($cacheName,$cache,array('expire'=>Config::get('@.INDEX_CACHE_TIME')));
 		}
-		else
-		{
-			$this->parseHeadInfo(array(
-				'CurrPage'	=>	$page
-			));
-		}
-		$articleModel = new ArticleModel;
-		$this->view->articleList = $articleModel->homeSelect()
-												->orderByNew()
-												->selectList(array(),$page,Config::get('@.SHOW_NUMBER.Home'),$totalPages);
-		$this->view->totalPages = $totalPages;
-		$this->view->currPage = $page;
-		$this->view->display();
+		header('Cache-Control:Public,max-age=' . Config::get('Custom.INDEX_CACHE_TIME'));
+		echo $cache;
 	}
 }
